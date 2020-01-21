@@ -1,13 +1,10 @@
 package com.wirecard.filestructure.gui.controller;
 
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import com.wirecard.filestructure.gui.model.BaseModel;
+import com.wirecard.filestructure.gui.view.MainViewPanel;
 
 public class MainController extends BaseController{
-    public MainController(){
-
+    public MainController(Object model){
+        super(model);
     }
-
 }

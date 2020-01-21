@@ -4,11 +4,16 @@ import com.wirecard.filestructure.gui.controller.BaseController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BaseView extends JPanel {
     private BaseController controller;
+    private List<Component> listComponent;
 
-    public BaseView(){
+    public BaseView()
+    {
+        listComponent = new ArrayList<Component>();
         this.initialize();
     }
 
@@ -16,6 +21,7 @@ public abstract class BaseView extends JPanel {
 
 
     public void registerController(BaseController baseController){
+        baseController.setActiveView(this);
         this.controller = baseController;
         this.setController(baseController);
     }
@@ -26,8 +32,17 @@ public abstract class BaseView extends JPanel {
         return this.controller;
     }
 
-    public Object getAllComponent(){
-        Component[] component = this.getComponents();
-        return component;
+    public void addComponent(Component component){
+        this.listComponent.add(component);
+
     }
+
+    public List<Component>  getAllComponents(){
+        return this.listComponent;
+    }
+
+    public void clearComponent(){
+        this.listComponent = new ArrayList<Component>();
+    }
+
 }

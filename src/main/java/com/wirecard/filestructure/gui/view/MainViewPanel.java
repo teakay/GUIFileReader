@@ -10,8 +10,8 @@ import java.awt.*;
 
 public class MainViewPanel extends BaseView{
     private JList menuList;
-    JSplitPane splitPane;
-    JLabel label;
+    private JSplitPane splitPane;
+    private JLabel label;
 
     public void setController(BaseController baseController) {
        menuList.addListSelectionListener(baseController);
@@ -19,14 +19,17 @@ public class MainViewPanel extends BaseView{
 
     public void initialize(){
         menuList = new JList(Constants.MENU);
+        menuList.setName("menuList");
         menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         menuList.setSelectedIndex(0);
 
         JScrollPane menuScrollPane = new JScrollPane(menuList);
 
         label = new JLabel();
+        label.setName("ContentLabel");
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setText("This is content panel");
+        addComponent(label);
 
         JScrollPane contentScrollPane = new JScrollPane(label);
 
@@ -42,6 +45,10 @@ public class MainViewPanel extends BaseView{
 
     public JSplitPane getSplitPane(){
         return splitPane;
+    }
+
+    public void setContentLabel(String value){
+        this.label.setText(value);
     }
 
 
