@@ -44,13 +44,13 @@ public class BaseController implements ActionListener, ListSelectionListener, Pr
             if("ContentLabel".equals(propertyName)) {
                 try {
                     Method method = this.activeView.getClass()
-                            .getMethod("set" + propertyName);
+                            .getDeclaredMethod("set"+propertyName,String.class);
+                    method.invoke(this.activeView,selectedMenu);
                 }catch(Exception ex){
                     ex.printStackTrace();
                 }
             }
         }
-        // label.setText(Constants.MENU[list.getSelectedIndex()]);
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
