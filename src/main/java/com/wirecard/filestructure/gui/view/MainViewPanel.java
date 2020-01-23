@@ -22,6 +22,7 @@ public class MainViewPanel extends BaseView{
         menuList.setName("menuList");
         menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         menuList.setSelectedIndex(0);
+        //menuList.setModel();
 
         JScrollPane menuScrollPane = new JScrollPane(menuList);
 
@@ -47,7 +48,7 @@ public class MainViewPanel extends BaseView{
         return splitPane;
     }
 
-    public void setContentLabel(String value){
+    public void setLabel(String value){
         this.label.setText(value);
     }
 

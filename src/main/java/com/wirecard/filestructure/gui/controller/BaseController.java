@@ -32,6 +32,7 @@ public class BaseController implements ActionListener, ListSelectionListener, Pr
 
     public void actionPerformed(ActionEvent e) {
         String methodAction = e.getActionCommand();
+        //go to model and update property
     }
 
     public void valueChanged(ListSelectionEvent e) {
@@ -54,6 +55,7 @@ public class BaseController implements ActionListener, ListSelectionListener, Pr
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
+        //go to model and update property
         System.out.println(evt.getPropertyName());
     }
 }

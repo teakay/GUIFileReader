@@ -3,14 +3,16 @@ package com.wirecard.filestructure.gui;
 import com.wirecard.filestructure.gui.controller.BaseController;
 import com.wirecard.filestructure.gui.controller.MainController;
 import com.wirecard.filestructure.gui.model.BaseModel;
+import com.wirecard.filestructure.gui.view.MainFrame;
 import com.wirecard.filestructure.gui.view.MainViewPanel;
+import sun.applet.Main;
 
 import javax.swing.*;
 
 public class FileStructureGUI {
     public static void main(String[] args){
 
-        BaseModel baseModel = new BaseModel();
+        /*BaseModel baseModel = new BaseModel();
         MainController controller = new MainController(baseModel);
 
         MainViewPanel mainView = new MainViewPanel();
@@ -20,6 +22,9 @@ public class FileStructureGUI {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.getContentPane().add(mainView.getSplitPane());
         mainFrame.pack();
+        mainFrame.setVisible(true);*/
+
+        MainFrame mainFrame = new MainFrame();
         mainFrame.setVisible(true);
 
 
