@@ -17,12 +17,17 @@ public class MainFrame extends JFrame {
     public MainFrame(){
         contentScrollPane = new JScrollPane();
 
+        //TODO : if banner needed
+        //BufferedImage myPicture = ImageIO.read(new File("path-to-file"));
+        //JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+        //add(picLabel);
+
         initMenu();
 
         JLabel label = new JLabel();
         label.setName("ContentLabel");
         label.setHorizontalAlignment(JLabel.CENTER);
-        label.setText("This is content panel");
+        label.setText("Please select menu to the left to start");
 
         setContent(label);
 
@@ -39,9 +44,8 @@ public class MainFrame extends JFrame {
         menuList = new JList(Constants.MENU);
         menuList.setName("menuList");
         menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        menuList.setSelectedIndex(0);
         menuList.addListSelectionListener(new MainController());
-
+        //menuList.setSelectedIndex(0);
         menuScrollPane = new JScrollPane(menuList);
     }
 

@@ -1,13 +1,6 @@
 package com.wirecard.filestructure.gui;
 
-import com.wirecard.filestructure.gui.controller.BaseController;
-import com.wirecard.filestructure.gui.controller.MainController;
-import com.wirecard.filestructure.gui.model.BaseModel;
 import com.wirecard.filestructure.gui.view.MainFrame;
-import com.wirecard.filestructure.gui.view.MainViewPanel;
-import sun.applet.Main;
-
-import javax.swing.*;
 
 public class FileStructureGUI {
     public static void main(String[] args){
