@@ -13,7 +13,6 @@ public abstract class BaseView extends JPanel {
 
     public BaseView()
     {
-        listComponent = new ArrayList<Component>();
         this.initialize();
     }
 
@@ -23,10 +22,9 @@ public abstract class BaseView extends JPanel {
     public void registerController(BaseController baseController){
         baseController.setActiveView(this);
         this.controller = baseController;
-        this.setController(baseController);
     }
 
-    public abstract void setController(BaseController baseController);
+//    public abstract void setController(BaseController baseController);
 
     public BaseController getController(){
         return this.controller;

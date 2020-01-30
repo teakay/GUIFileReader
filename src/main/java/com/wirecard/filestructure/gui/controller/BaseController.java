@@ -11,16 +11,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
 public class BaseController implements ActionListener, ListSelectionListener, PropertyChangeListener {
     Object baseModel;
     BaseView activeView;
-
-    public BaseController(Object model){
-        this.baseModel = model;
+    public BaseController(){
     }
+
+//    public BaseController(Object model){
+//        this.baseModel = model;
+//    }
 
     public void setActiveView(BaseView activeView){
         this.activeView = activeView;
@@ -32,6 +35,20 @@ public class BaseController implements ActionListener, ListSelectionListener, Pr
 
     public void actionPerformed(ActionEvent e) {
         String methodAction = e.getActionCommand();
+        
+        try {
+            Class controller = this.getClass();
+            Method method = controller.getDeclaredMethod("do"+methodAction);
+            method.invoke(controller.newInstance());
+        } catch (NoSuchMethodException ex) {
+            ex.printStackTrace();
+        } catch (IllegalAccessException ex) {
+            ex.printStackTrace();
+        } catch (InvocationTargetException ex) {
+            ex.printStackTrace();
+        } catch (InstantiationException ex) {
+            ex.printStackTrace();
+        }
         //go to model and update property
     }
 

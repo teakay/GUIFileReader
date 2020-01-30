@@ -1,38 +1,45 @@
 package com.wirecard.filestructure.gui.view;
 
+import com.wirecard.filestructure.gui.controller.BaseController;
+import com.wirecard.filestructure.gui.controller.FileStructureController;
+import com.wirecard.filestructure.gui.model.FileStructureTableModel;
 import com.wirecard.filestructure.gui.utils.Constants;
+import sun.plugin.javascript.JSClassLoader;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class StructureFileView extends JPanel {
+public class StructureFileView extends BaseView {
     private JTable structureTable;
     private GridBagConstraints gbc;
     private int col;
     private int row;
+
     public StructureFileView(){
-        initialize();
     }
     public void initialize(){
+        registerController(new FileStructureController());
+
         setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
         col = 0;
         row = 0;
 
         initSearchComponent();
-        initAddButton();
         initTable();
+        initAddButton();
+        initDeleteButton();
         initPaging();
 
     }
 
     private void initSearchComponent(){
-        JTextField textField = new JTextField(10);
-        textField.setSize(100,30);
+        JTextField textField = new JTextField(15);
         gbc.gridx = col;
         gbc.gridy = row;
-        gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(0,0,0,0);
         add(textField,gbc);
 
         JButton searchButton = new JButton();
@@ -43,33 +50,53 @@ public class StructureFileView extends JPanel {
         gbc.insets = new Insets(0,10,0,0);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         searchButton.setText("Search");
+        searchButton.setActionCommand("Search");
+        searchButton.addActionListener(this.getController());
         add(searchButton, gbc);
     }
 
-    private void initAddButton(){
-        JButton addButton = new JButton();
-        col += 2;
-        gbc.gridx = col;
+    private void initDeleteButton(){
+        JButton deleteButton = new JButton();
+        gbc.gridx = ++col;
         gbc.gridy = row;
         gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.FIRST_LINE_END;
+        gbc.insets = new Insets(10,10,0,0);
+        deleteButton.setText("Delete");
+        deleteButton.setActionCommand("Delete");
+        deleteButton.addActionListener(this.getController());
+        add(deleteButton,gbc);
+
+    }
+    private void initAddButton(){
+        JButton addButton = new JButton();
+        col = 0;
+        gbc.gridx = col;
+        gbc.gridy = ++row;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10,0,0,0);
         addButton.setText("Add");
+        addButton.setActionCommand("Add");
+        addButton.addActionListener(this.getController());
         add(addButton,gbc);
 
     }
     private void initTable(){
         col = 0;
-        Object[][] data = {
-                {"CTL File", "txt","24/01/2020"},
-                {"Pay File","txt","24/01/2020"}
-        };
 
-        structureTable = new JTable(data, Constants.STRUCTURE_FILE_LIST_COLUMN);
+
+        structureTable = new JTable(new FileStructureTableModel());
+        structureTable.setFillsViewportHeight(true);
+
         gbc.gridx = col;
         gbc.gridy = ++row;
         gbc.gridwidth = 6;
         gbc.insets = new Insets(20,0,0,0);
-        add(new JScrollPane(structureTable),gbc);
+
+        JScrollPane scrollPane = new JScrollPane(structureTable);
+        structureTable.setFillsViewportHeight(true);
+
+       add(scrollPane,gbc);
 
     }
     private void initPaging(){
@@ -81,7 +108,6 @@ public class StructureFileView extends JPanel {
         gbc.ipady = 0;
         gbc.gridx = col;
         gbc.gridy = row;
-        
         gbc.gridwidth = 1;
         add(prev,gbc);
 
@@ -91,7 +117,6 @@ public class StructureFileView extends JPanel {
         gbc.ipady = 0;
         gbc.gridx = ++col;
         gbc.gridy = row;
-       // gbc.weightx = 1;
         gbc.gridwidth = 1;
         add(next,gbc);
     }

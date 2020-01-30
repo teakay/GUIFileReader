@@ -38,6 +38,7 @@ public class MainFrame extends JFrame {
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("File Structure Parser and Creator");
+
     }
 
     private void initMenu(){
