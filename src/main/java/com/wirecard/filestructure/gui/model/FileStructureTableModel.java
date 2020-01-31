@@ -2,7 +2,6 @@ package com.wirecard.filestructure.gui.model;
 
 import javax.swing.table.AbstractTableModel;
 
-//make model as subject and view as observer
 public class FileStructureTableModel extends AbstractTableModel {
     private String[] columnNames  = {"Structure name","File extension", "Created date"," "};
     private Object[][] data = {

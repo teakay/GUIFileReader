@@ -1,10 +1,7 @@
 package com.wirecard.filestructure.gui.view;
 
-import com.wirecard.filestructure.gui.controller.BaseController;
 import com.wirecard.filestructure.gui.controller.FileStructureController;
 import com.wirecard.filestructure.gui.model.FileStructureTableModel;
-import com.wirecard.filestructure.gui.utils.Constants;
-import sun.plugin.javascript.JSClassLoader;
 
 import javax.swing.*;
 import java.awt.*;
