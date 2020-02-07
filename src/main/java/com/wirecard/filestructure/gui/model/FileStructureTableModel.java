@@ -1,13 +1,12 @@
 package com.wirecard.filestructure.gui.model;
 
+import com.wirecard.filestructure.gui.utils.Constants;
+
 import javax.swing.table.AbstractTableModel;
 
 public class FileStructureTableModel extends AbstractTableModel {
-    private String[] columnNames  = {"Structure name","File extension", "Created date"," "};
-    private Object[][] data = {
-            {"CTL File","txt","28-01-2020",false},
-            {"Pay File","txt","30-01-2020",false}
-    };
+    private String[] columnNames  = Constants.FILE_STRUCTURE_TABLE_COLUMN;
+    private Object[][] data = Constants.FILE_STRUCTURE_DUMMY_DATA;
 
     @Override
     public int getRowCount() {
