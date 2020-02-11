@@ -103,6 +103,7 @@ public class AbstractController implements PropertyChangeListener {
 
             } catch (Exception ex) {
                 //  Handle exception
+                ex.printStackTrace();
             }
         }
     }

@@ -4,7 +4,7 @@ import com.wirecard.filestructure.gui.utils.Constants;
 
 import javax.swing.table.AbstractTableModel;
 
-public class FileStructureTableModel extends AbstractTableModel {
+public class StructureTableModel extends AbstractTableModel {
     private String[] columnNames  = Constants.FILE_STRUCTURE_TABLE_COLUMN;
     private Object[][] data = Constants.FILE_STRUCTURE_DUMMY_DATA;
 
