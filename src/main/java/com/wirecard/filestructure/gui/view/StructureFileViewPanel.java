@@ -31,17 +31,26 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
     private void initComponent(){
         setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
+        int row = 0;
+
+        JLabel titleLabel = new JLabel("List of created file structure");
+        titleLabel.setFont(new Font("Arial",Font.BOLD,18));
+        gbc.gridx = 0;
+        gbc.gridy = row;
+        gbc.gridwidth = 3;
+        gbc.insets = new Insets(0,0,20,0);
+        add(titleLabel,gbc);
 
         JLabel label = new JLabel(" ");
         gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridy = ++row;
+        gbc.gridwidth = 1;
         gbc.insets = new Insets(0,80,10,80);
         add(label,gbc);
 
         searchText =  new JTextField(18);
         gbc.gridx = 1;
-        gbc.gridy = 0;
+        gbc.gridy = row;
         gbc.fill = GridBagConstraints.VERTICAL;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.gridwidth = 1;
@@ -50,7 +59,7 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
 
         searchButton = new JButton();
         gbc.gridx = 2;
-        gbc.gridy = 0;
+        gbc.gridy = row;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0,0,10,0);
         searchButton.setText("Search");
@@ -58,9 +67,9 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
 
         structureFileTable = new JTable(new StructureTableModel());
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = ++row;
+        gbc.ipadx = 0;
         gbc.gridwidth = 3;
-
         rowSorter = new TableRowSorter<TableModel>(structureFileTable.getModel());
         structureFileTable.setRowSorter(rowSorter);
 
@@ -74,18 +83,25 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
         JScrollPane scrollPane = new JScrollPane(structureFileTable);
         add(scrollPane,gbc);
 
+        JLabel label2 = new JLabel(" ");
+        gbc.gridx = 0;
+        gbc.gridy = ++row;
+        gbc.gridwidth = 1;
+        add(label2,gbc);
+
         addButton = new JButton();
         addButton.setText("Add");
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.ipadx = 0;
+        gbc.gridx = 1;
+        gbc.gridy = row;
+        gbc.gridwidth = 1;
         add(addButton,gbc);
 
         deleteButton = new JButton();
         deleteButton.setText("Delete");
         gbc.gridx = 2;
-        gbc.gridy = 2;
-        gbc.anchor = GridBagConstraints.EAST;
+        gbc.gridy = row;
+        gbc.gridwidth = 1;
         add(deleteButton,gbc);
 
 

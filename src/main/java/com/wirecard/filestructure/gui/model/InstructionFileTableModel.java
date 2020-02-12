@@ -2,15 +2,20 @@ package com.wirecard.filestructure.gui.model;
 
 import com.wirecard.filestructure.gui.utils.Constants;
 
+import javax.jws.Oneway;
 import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
 
 public class InstructionFileTableModel extends AbstractTableModel {
     private String[] columnNames  = Constants.INSTRUCTION_FILE_TABLE_COLUMN;
-    private Object[][] data = {{null,null,null,null,null}};
+    private ArrayList<Object[]> data = new ArrayList<Object[]>();
+
+    public InstructionFileTableModel(){
+    }
 
     @Override
     public int getRowCount() {
-        return data.length;
+        return data.size();
     }
 
     @Override
@@ -20,7 +25,7 @@ public class InstructionFileTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return data[rowIndex][columnIndex];
+        return data.get(rowIndex)[columnIndex];
     }
 
     public String getColumnName(int col){
@@ -44,6 +49,19 @@ public class InstructionFileTableModel extends AbstractTableModel {
         }
     }
 
-    public void addRow(Object[][] data){
+    public void addRow(Object[] dataRow){
+        data.add(dataRow);
+       fireTableDataChanged();
+    }
+
+    public void deleteRow(){
+        data.remove(getRowCount()-1);
+        fireTableDataChanged();
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex)
+    {
+        return true;
     }
 }

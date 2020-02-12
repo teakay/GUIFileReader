@@ -58,5 +58,6 @@ public class MainFrame extends JFrame {
         contentScrollPane.getViewport().add(component);
         contentScrollPane.revalidate();
         contentScrollPane.repaint();
+
     }
 }

@@ -24,9 +24,16 @@ public class AddStructureFileView extends AbstractViewPanel {
     private JButton addButton2;
     private JButton deleteButton3;
     private JButton addButton3;
+    private InstructionFileTableModel headerTableModel;
+    private InstructionFileTableModel detailTableModel;
+    private InstructionFileTableModel footerTableModel;
 
     public AddStructureFileView(StructureFileController controller){
         this.controller = controller;
+        headerTableModel = new InstructionFileTableModel();
+        detailTableModel = new InstructionFileTableModel();
+        footerTableModel = new InstructionFileTableModel();
+
         initComponent();
         localInitialization();
     }
@@ -36,9 +43,17 @@ public class AddStructureFileView extends AbstractViewPanel {
 
         int row =  0;
 
-        JLabel nameLabel = new JLabel("Structure File Name");
+        JLabel titleLabel = new JLabel("Create New File Structure");
+        titleLabel.setFont(new Font("Arial",Font.BOLD,18));
         gbc.gridx = 0;
         gbc.gridy = row;
+        gbc.gridwidth = 3;
+        gbc.insets = new Insets(0,0,20,0);
+        add(titleLabel,gbc);
+
+        JLabel nameLabel = new JLabel("Structure File Name");
+        gbc.gridx = 0;
+        gbc.gridy = ++row;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = 1;
         gbc.insets = new Insets(0,10,10,10);
@@ -48,8 +63,8 @@ public class AddStructureFileView extends AbstractViewPanel {
         gbc.ipady = 10;
         gbc.gridx = 1;
         gbc.gridy = row;
-        gbc.fill = GridBagConstraints.VERTICAL;
-        gbc.insets = new Insets(10,10,10,10);
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(10,0,20,10);
         add(nameTextField, gbc);
 
         JLabel label = new JLabel("Header");
@@ -58,9 +73,10 @@ public class AddStructureFileView extends AbstractViewPanel {
         gbc.gridy = ++row;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = 3;
+        gbc.insets = new Insets(0,10,10,80);
         add(label, gbc);
 
-        headerTable = new JTable(new InstructionFileTableModel());
+        headerTable = new JTable(headerTableModel);
         gbc.gridx = 0;
         gbc.gridy = ++row;
         gbc.gridwidth = 3;
@@ -69,12 +85,20 @@ public class AddStructureFileView extends AbstractViewPanel {
         JScrollPane scrollPane = new JScrollPane(headerTable);
         add(scrollPane,gbc);
 
+
         addButton1 = new JButton();
         addButton1.setText("Add");
         gbc.gridx = 0;
         gbc.gridy = ++row;
         gbc.gridwidth = 1;
         add(addButton1,gbc);
+
+        deleteButton1 = new JButton();
+        deleteButton1.setText("Delete");
+        gbc.gridx = 1;
+        gbc.gridy = row;
+        gbc.gridwidth = 1;
+        add(deleteButton1,gbc);
 
         JLabel detailLabel = new JLabel("Detail");
         gbc.gridx = 0;
@@ -83,7 +107,7 @@ public class AddStructureFileView extends AbstractViewPanel {
         gbc.gridwidth = 3;
         add(detailLabel, gbc);
 
-        detailTable = new JTable(new InstructionFileTableModel());
+        detailTable = new JTable(detailTableModel);
         gbc.gridx = 0;
         gbc.gridy = ++row;
         gbc.gridwidth = 3;
@@ -93,6 +117,20 @@ public class AddStructureFileView extends AbstractViewPanel {
         JScrollPane scrollPaneDetail = new JScrollPane(detailTable);
         add(scrollPaneDetail,gbc);
 
+        addButton2 = new JButton();
+        addButton2.setText("Add");
+        gbc.gridx = 0;
+        gbc.gridy = ++row;
+        gbc.gridwidth = 1;
+        add(addButton2,gbc);
+
+        deleteButton2 = new JButton();
+        deleteButton2.setText("Delete");
+        gbc.gridx = 1;
+        gbc.gridy = row;
+        gbc.gridwidth = 1;
+        add(deleteButton2,gbc);
+
         JLabel footerLabel = new JLabel("Footer");
         gbc.gridx = 0;
         gbc.gridy = ++row;
@@ -100,7 +138,7 @@ public class AddStructureFileView extends AbstractViewPanel {
         gbc.gridwidth = 3;
         add(footerLabel, gbc);
 
-        footerTable = new JTable(new InstructionFileTableModel());
+        footerTable = new JTable(footerTableModel);
         gbc.gridx = 0;
         gbc.gridy = ++row;
         gbc.gridwidth = 3;
@@ -109,6 +147,27 @@ public class AddStructureFileView extends AbstractViewPanel {
 
         JScrollPane scrollPaneFooter = new JScrollPane(footerTable);
         add(scrollPaneFooter,gbc);
+
+        addButton3 = new JButton();
+        addButton3.setText("Add");
+        gbc.gridx = 0;
+        gbc.gridy = ++row;
+        gbc.gridwidth = 1;
+        add(addButton3,gbc);
+
+        deleteButton3 = new JButton();
+        deleteButton3.setText("Delete");
+        gbc.gridx = 1;
+        gbc.gridy = row;
+        gbc.gridwidth = 1;
+        add(deleteButton3,gbc);
+
+        JSeparator separator = new JSeparator();
+        separator.setOrientation(SwingConstants.HORIZONTAL);
+        gbc.gridx = 0;
+        gbc.gridy = ++row;
+        gbc.gridwidth = 3;
+        add(separator,gbc);
 
         backButton = new JButton();
         backButton.setText("Back");
@@ -138,6 +197,40 @@ public class AddStructureFileView extends AbstractViewPanel {
         addButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                headerTableModel.addRow(new Object[]{null,null,null,null,false});
+            }
+        });
+        deleteButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                headerTableModel.deleteRow();
+            }
+        });
+
+        addButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                detailTableModel.addRow(new Object[]{null,null,null,null,false});
+            }
+        });
+
+        deleteButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                detailTableModel.deleteRow();
+            }
+        });
+        addButton3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                footerTableModel.addRow(new Object[]{null,null,null,null,false});
+            }
+        });
+
+        deleteButton3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                footerTableModel.deleteRow();
             }
         });
     }
@@ -145,6 +238,7 @@ public class AddStructureFileView extends AbstractViewPanel {
     private AbstractViewPanel getContainer(){
         return this;
     }
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
 
