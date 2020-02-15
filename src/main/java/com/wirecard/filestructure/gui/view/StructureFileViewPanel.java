@@ -4,6 +4,8 @@ import com.wirecard.filestructure.gui.controller.StructureFileController;
 import com.wirecard.filestructure.gui.model.StructureTableModel;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
@@ -131,6 +133,19 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
 
             }
         });
+//        structureFileTable.getModel().addTableModelListener(new TableModelListener() {
+//            @Override
+//            public void tableChanged(TableModelEvent e) {
+//                int row = e.getFirstRow();
+//                int column = e.getColumn();
+//
+//                if(column == structureFileTable.getColumnCount()){
+//                    TableModel model = (TableModel) e.getSource();
+//                    Boolean checked = (Boolean) model.getValueAt(row, column);
+//                    structureFileTable.setValueAt(!checked.booleanValue(),row,column);
+//                }
+//            }
+//        });
     }
 
     @Override

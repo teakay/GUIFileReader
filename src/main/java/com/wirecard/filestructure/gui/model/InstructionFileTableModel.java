@@ -64,4 +64,11 @@ public class InstructionFileTableModel extends AbstractTableModel {
     {
         return true;
     }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        data.get(rowIndex)[columnIndex] = aValue;
+        fireTableDataChanged();
+    }
+
 }

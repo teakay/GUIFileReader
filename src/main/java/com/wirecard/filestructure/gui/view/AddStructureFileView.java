@@ -13,6 +13,7 @@ public class AddStructureFileView extends AbstractViewPanel {
 
     private StructureFileController controller;
     private GridBagConstraints gbc;
+    private JTextField nameTextField;
     private JTable headerTable;
     private JTable detailTable;
     private JTable footerTable;
@@ -59,7 +60,7 @@ public class AddStructureFileView extends AbstractViewPanel {
         gbc.insets = new Insets(0,10,10,10);
         add(nameLabel, gbc);
 
-        JTextField nameTextField = new JTextField(15);
+        nameTextField = new JTextField(15);
         gbc.ipady = 10;
         gbc.gridx = 1;
         gbc.gridy = row;
@@ -88,14 +89,14 @@ public class AddStructureFileView extends AbstractViewPanel {
 
         addButton1 = new JButton();
         addButton1.setText("Add");
-        gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridy = ++row;
         gbc.gridwidth = 1;
         add(addButton1,gbc);
 
         deleteButton1 = new JButton();
         deleteButton1.setText("Delete");
-        gbc.gridx = 1;
+        gbc.gridx = 2;
         gbc.gridy = row;
         gbc.gridwidth = 1;
         add(deleteButton1,gbc);
@@ -233,6 +234,8 @@ public class AddStructureFileView extends AbstractViewPanel {
                 footerTableModel.deleteRow();
             }
         });
+
+        //TODO : add cell edit listener
     }
 
     private AbstractViewPanel getContainer(){
