@@ -14,6 +14,7 @@ public class AddStructureFileView extends AbstractViewPanel {
     private StructureFileController controller;
     private GridBagConstraints gbc;
     private JTextField nameTextField;
+    private JComboBox fileExtensionList;
     private JTable headerTable;
     private JTable detailTable;
     private JTable footerTable;
@@ -65,8 +66,26 @@ public class AddStructureFileView extends AbstractViewPanel {
         gbc.gridx = 1;
         gbc.gridy = row;
         gbc.gridwidth = 1;
-        gbc.insets = new Insets(10,0,20,10);
+        gbc.insets = new Insets(10,0,10,10);
         add(nameTextField, gbc);
+
+        JLabel extensionLabel = new JLabel("File Extension");
+        gbc.gridx = 0;
+        gbc.gridy = ++row;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(0,10,10,10);
+        add(extensionLabel, gbc);
+
+        fileExtensionList = new JComboBox();
+        fileExtensionList.addItem("txt");
+        fileExtensionList.addItem("csv");
+        gbc.gridx = 1;
+        gbc.gridy = row;
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(10,0,10,10);
+        add(fileExtensionList, gbc);
+
 
         JLabel label = new JLabel("Header");
         gbc.ipady = 0;
@@ -74,7 +93,7 @@ public class AddStructureFileView extends AbstractViewPanel {
         gbc.gridy = ++row;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = 3;
-        gbc.insets = new Insets(0,10,10,80);
+        gbc.insets = new Insets(0,10,0,80);
         add(label, gbc);
 
         headerTable = new JTable(headerTableModel);
