@@ -1,22 +1,23 @@
 package com.wirecard.filestructure.gui.controller;
 
+import com.wirecard.filestructure.gui.service.StructureFileService;
 import com.wirecard.filestructure.gui.view.AbstractViewPanel;
 import com.wirecard.filestructure.gui.view.AddStructureFileView;
 import com.wirecard.filestructure.gui.view.MainFrame;
 import com.wirecard.filestructure.gui.view.StructureFileViewPanel;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
+import java.util.List;
 
 public class StructureFileController extends AbstractController {
 
     public static final String DATA_TABLE_SEARCH = "Search";
     public static final String DATA_ADD = "Add";
+    public static final String DATA_DELETE = "Delete";
 
-    public void doSearch(String query){
-//        System.out.println("Query search : "+query);
-        setModelProperty(DATA_TABLE_SEARCH,query);
-    }
+//    public void doSearch(String query){
+//        setModelProperty(DATA_TABLE_SEARCH,query);
+//    }
 
     public void doAdd(AbstractViewPanel view){
         removeView(view);
@@ -35,6 +36,14 @@ public class StructureFileController extends AbstractController {
 
         MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(view);
         mainFrame.setContent(structureView);
+    }
+
+    public void doDelete(Object[] data){
+        StructureFileService.deleteById((String)data[0]);
+    }
+
+    public List getStructureFileList(){
+        return StructureFileService.getStructureFileList();
     }
 
 }

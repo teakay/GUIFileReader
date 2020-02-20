@@ -23,9 +23,12 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
     private JButton searchButton;
     private JButton addButton;
     private JButton deleteButton;
+    private StructureTableModel structureTableModel;
 
     public StructureFileViewPanel(StructureFileController controller){
         this.controller = controller;
+        structureTableModel = new StructureTableModel();
+
         initComponent();
         localInitialization();
     }
@@ -67,7 +70,7 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
         searchButton.setText("Search");
         add(searchButton,gbc);
 
-        structureFileTable = new JTable(new StructureTableModel());
+        structureFileTable = new JTable(structureTableModel);
         gbc.gridx = 0;
         gbc.gridy = ++row;
         gbc.ipadx = 0;
@@ -113,10 +116,12 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
         return this;
     }
     private void localInitialization(){
+        structureTableModel.addRow(controller.getStructureFileList());
+
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.doSearch(searchText.getText().toString());
+                rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText.getText()));
             }
         });
 
@@ -131,6 +136,15 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                for(int row = 0; row < structureFileTable.getRowCount(); row++){
+                    Boolean checked = (Boolean) structureFileTable.getValueAt(row,4);
+                    if(checked){
+                        Object[] selectedData = structureTableModel.getRowData(row);
+                        controller.doDelete(selectedData);
+                        structureTableModel.deleteRow(selectedData);
+                        break;
+                    }
+                }
             }
         });
 //        structureFileTable.getModel().addTableModelListener(new TableModelListener() {
@@ -150,8 +164,6 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if(StructureFileController.DATA_TABLE_SEARCH.equals(evt.getPropertyName())){
-            rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText.getText()));
-        }
+
     }
 }

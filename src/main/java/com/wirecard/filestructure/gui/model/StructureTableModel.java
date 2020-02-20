@@ -11,10 +11,6 @@ public class StructureTableModel extends AbstractTableModel {
     private List<Object[]> data = new ArrayList<Object[]>();
 
 
-//    public StructureTableModel(){
-//        data.add(new Object[]{null,null,null,false});
-//    }
-
     @Override
     public int getRowCount() {
         return data.size();
@@ -37,7 +33,7 @@ public class StructureTableModel extends AbstractTableModel {
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex)
     {
-        if(columnIndex == 3) {
+        if(columnIndex == 4) {
             return true;
         }else{
             return false;
@@ -52,6 +48,8 @@ public class StructureTableModel extends AbstractTableModel {
        }else if(col == 2){
            return String.class;
        }else if(col == 3){
+           return String.class;
+       }else if(col == 4){
            return Boolean.class;
        }else{
            return String.class;
@@ -64,4 +62,30 @@ public class StructureTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
+    public void addRow(Object[] dataRow){
+        data.add(dataRow);
+        fireTableDataChanged();
+    }
+
+    public void addRow(List dataRow){
+        data.addAll(dataRow);
+        fireTableDataChanged();
+    }
+
+    public void updateRow(){
+        fireTableDataChanged();
+    }
+
+    public void deleteRow(Object[] dataRow){
+        data.remove(dataRow);
+        fireTableDataChanged();
+    }
+
+    public void deleteRow(){
+        data.remove(getRowCount() - 1);
+        fireTableDataChanged();
+    }
+    public Object[] getRowData(int row){
+        return data.get(row);
+    }
 }

@@ -1,7 +1,5 @@
 package com.wirecard.filestructure.gui.view;
 
-import com.wirecard.filestructure.gui.controller.DefaultController;
-
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 

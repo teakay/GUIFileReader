@@ -9,7 +9,7 @@ public class StructureFileModel extends AbstractModel {
     public String getText(){
         return this.text;
     }
-    public void setSearch(String text){
+    public void doSearch(String text){
         String oldSearch = this.text;
         this.text = text;
 
