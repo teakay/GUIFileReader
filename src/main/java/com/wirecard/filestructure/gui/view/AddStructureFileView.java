@@ -8,6 +8,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddStructureFileView extends AbstractViewPanel {
 
@@ -32,6 +34,7 @@ public class AddStructureFileView extends AbstractViewPanel {
 
     public AddStructureFileView(StructureFileController controller){
         this.controller = controller;
+
         headerTableModel = new InstructionFileTableModel();
         detailTableModel = new InstructionFileTableModel();
         footerTableModel = new InstructionFileTableModel();
@@ -139,14 +142,14 @@ public class AddStructureFileView extends AbstractViewPanel {
 
         addButton2 = new JButton();
         addButton2.setText("Add");
-        gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridy = ++row;
         gbc.gridwidth = 1;
         add(addButton2,gbc);
 
         deleteButton2 = new JButton();
         deleteButton2.setText("Delete");
-        gbc.gridx = 1;
+        gbc.gridx = 2;
         gbc.gridy = row;
         gbc.gridwidth = 1;
         add(deleteButton2,gbc);
@@ -170,14 +173,14 @@ public class AddStructureFileView extends AbstractViewPanel {
 
         addButton3 = new JButton();
         addButton3.setText("Add");
-        gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridy = ++row;
         gbc.gridwidth = 1;
         add(addButton3,gbc);
 
         deleteButton3 = new JButton();
         deleteButton3.setText("Delete");
-        gbc.gridx = 1;
+        gbc.gridx = 2;
         gbc.gridy = row;
         gbc.gridwidth = 1;
         add(deleteButton3,gbc);
@@ -217,7 +220,7 @@ public class AddStructureFileView extends AbstractViewPanel {
         addButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                headerTableModel.addRow(new Object[]{null,null,null,null,false});
+                headerTableModel.addRow(new Object[]{null,headerTableModel.getRowCount()+1,null,null,null,null,false});
             }
         });
         deleteButton1.addActionListener(new ActionListener() {
@@ -230,7 +233,7 @@ public class AddStructureFileView extends AbstractViewPanel {
         addButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                detailTableModel.addRow(new Object[]{null,null,null,null,false});
+                detailTableModel.addRow(new Object[]{null,detailTableModel.getRowCount()+1,null,null,null,null,false});
             }
         });
 
@@ -240,13 +243,13 @@ public class AddStructureFileView extends AbstractViewPanel {
                 detailTableModel.deleteRow();
             }
         });
+
         addButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                footerTableModel.addRow(new Object[]{null,null,null,null,false});
+                footerTableModel.addRow(new Object[]{null,footerTableModel.getRowCount()+1,null,null,null,null,false});
             }
         });
-
         deleteButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -254,7 +257,13 @@ public class AddStructureFileView extends AbstractViewPanel {
             }
         });
 
-        //TODO : add cell edit listener
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.doSaveData(getContainer(),nameTextField.getText(), (String)fileExtensionList.getSelectedItem(),headerTableModel.getAllData(), detailTableModel.getAllData(), footerTableModel.getAllData());
+            }
+        });
+
     }
 
     private AbstractViewPanel getContainer(){

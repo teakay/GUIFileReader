@@ -7,6 +7,6 @@ public class Constants {
             {"CTL File","txt","28-01-2020",false},
             {"Pay File","txt","30-01-2020",false}
     };
-    public final static String[] INSTRUCTION_FILE_TABLE_COLUMN = {"ID","No","Field Name","Mandatory","Length","Action"};
+    public final static String[] INSTRUCTION_FILE_TABLE_COLUMN = {"ID","No","Field Name","Mandatory","Data Type","Length","Action"};
 
 }

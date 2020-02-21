@@ -13,5 +13,6 @@
         <property name="connection.password"></property>
 
         <mapping class="com.wirecard.filestructure.gui.entity.StructureFile"/>
+        <mapping class="com.wirecard.filestructure.gui.entity.StructureFileDetail"/>
     </session-factory>
 </hibernate-configuration>

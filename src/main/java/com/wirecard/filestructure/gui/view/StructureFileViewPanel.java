@@ -11,7 +11,11 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StructureFileViewPanel extends  AbstractViewPanel {
 
@@ -115,8 +119,10 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
     public AbstractViewPanel getContainer(){
         return this;
     }
+
     private void localInitialization(){
         structureTableModel.addRow(controller.getStructureFileList());
+        structureFileTable.removeColumn(structureFileTable.getColumnModel().getColumn(0)); //hide column ID
 
         searchButton.addActionListener(new ActionListener() {
             @Override
@@ -135,31 +141,31 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                List selectedData = new ArrayList();
 
                 for(int row = 0; row < structureFileTable.getRowCount(); row++){
                     Boolean checked = (Boolean) structureFileTable.getValueAt(row,4);
                     if(checked){
-                        Object[] selectedData = structureTableModel.getRowData(row);
-                        controller.doDelete(selectedData);
-                        structureTableModel.deleteRow(selectedData);
-                        break;
+                        Object[] data = structureTableModel.getRowData(row);
+                       selectedData.add(data);
                     }
+                }
+
+                controller.doDelete(selectedData);
+                structureTableModel.deleteRow(selectedData);
+            }
+        });
+        structureFileTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JTable table = (JTable) e.getSource();
+                if(e.getClickCount() == 2){
+                    int row = table.getSelectedRow();
+                    System.out.println("row selected id : " + (String) structureTableModel.getValueAt(row,0));
+                    //controller.doDetail(getContainer(), (String) structureTableModel.getValueAt(row,0));
                 }
             }
         });
-//        structureFileTable.getModel().addTableModelListener(new TableModelListener() {
-//            @Override
-//            public void tableChanged(TableModelEvent e) {
-//                int row = e.getFirstRow();
-//                int column = e.getColumn();
-//
-//                if(column == structureFileTable.getColumnCount()){
-//                    TableModel model = (TableModel) e.getSource();
-//                    Boolean checked = (Boolean) model.getValueAt(row, column);
-//                    structureFileTable.setValueAt(!checked.booleanValue(),row,column);
-//                }
-//            }
-//        });
     }
 
     @Override

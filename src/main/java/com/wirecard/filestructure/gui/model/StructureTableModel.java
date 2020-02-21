@@ -76,8 +76,8 @@ public class StructureTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    public void deleteRow(Object[] dataRow){
-        data.remove(dataRow);
+    public void deleteRow(List dataRow){
+        data.removeAll(dataRow);
         fireTableDataChanged();
     }
 

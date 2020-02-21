@@ -5,10 +5,11 @@ import com.wirecard.filestructure.gui.utils.Constants;
 import javax.jws.Oneway;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
+import java.util.List;
 
 public class InstructionFileTableModel extends AbstractTableModel {
     private String[] columnNames  = Constants.INSTRUCTION_FILE_TABLE_COLUMN;
-    private ArrayList<Object[]> data = new ArrayList<Object[]>();
+    private List<Object[]> data = new ArrayList<Object[]>();
 
     public InstructionFileTableModel(){
     }
@@ -34,14 +35,18 @@ public class InstructionFileTableModel extends AbstractTableModel {
 
     public Class getColumnClass(int col){
         if(col == 0){
-            return Integer.class;
-        }else if(col == 1){
             return String.class;
+        }else if(col == 1){
+            return Integer.class;
         }else if(col == 2){
             return String.class;
         }else if(col == 3){
-            return Integer.class;
+            return String.class;
         }else if(col == 4){
+            return String.class;
+        }else if(col == 5){
+            return Integer.class;
+        }else if(col == 6){
             return Boolean.class;
         }
         else{
@@ -62,13 +67,21 @@ public class InstructionFileTableModel extends AbstractTableModel {
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex)
     {
-        return true;
+        if(columnIndex == 0 || columnIndex == 1){
+            return false;
+        }else {
+            return true;
+        }
     }
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         data.get(rowIndex)[columnIndex] = aValue;
         fireTableDataChanged();
+    }
+
+    public List<Object[]> getAllData(){
+        return this.data;
     }
 
 }
