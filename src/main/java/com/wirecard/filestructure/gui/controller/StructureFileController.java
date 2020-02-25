@@ -1,5 +1,7 @@
 package com.wirecard.filestructure.gui.controller;
 
+import com.wirecard.filestructure.gui.entity.StructureFile;
+import com.wirecard.filestructure.gui.entity.StructureFileDetail;
 import com.wirecard.filestructure.gui.service.StructureFileService;
 import com.wirecard.filestructure.gui.view.*;
 
@@ -72,15 +74,53 @@ public class StructureFileController extends AbstractController {
         }
     }
 
-    public void doDetail(AbstractViewPanel view, String idData){
+    public void doDetail(AbstractViewPanel view, String idData, String fileName){
         removeView(view);
 
         DetailStructureFileView detailView = new DetailStructureFileView(this);
         addView(detailView);
+        List detailList = (List) service.getDetail(idData);
+
+        Map map = new HashMap();
+        StructureFile structureFile = ((StructureFileDetail) detailList.get(0)).getStructureFile();
+
+        map.put("fileName", structureFile.getStructureName());
+        map.put("fileExtension",structureFile.getExtension());
+
+        for(int i = 0; i < detailList.size(); i++){
+            map.put(((StructureFileDetail)detailList.get(i)).getDetailType(),((StructureFileDetail)detailList.get(i)).getArrayObject());
+        }
+
+        detailView.setData(map);
 
         MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(view);
         mainFrame.setContent(detailView);
     }
+
+    public void doUpdate(AbstractViewPanel view, String structureName, String extension, List headerData, List detailData, List footerData){
+        try{
+            Map dataMap = new HashMap();
+
+            dataMap.put("structureName",structureName);
+            dataMap.put("extension",extension);
+            dataMap.put("headerData",headerData);
+            dataMap.put("detailData",detailData);
+            dataMap.put("footerData",footerData);
+
+            service.updateData(dataMap);
+            removeView(view);
+
+            StructureFileViewPanel structureView = new StructureFileViewPanel(this);
+            addView(structureView);
+
+            MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(view);
+            mainFrame.setContent(structureView);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
 
     public List getStructureFileList(){
         try {

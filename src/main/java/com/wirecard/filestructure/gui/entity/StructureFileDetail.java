@@ -17,8 +17,9 @@ public class StructureFileDetail {
     @Column(name="sfd_id",updatable=false,nullable=false)
     private String id;
 
-    @Column(name="sf_id")
-    private String headerId;
+    @ManyToOne
+    @JoinColumn(name="sf_id")
+    private StructureFile structureFile;
 
     @Column(name="sfd_detail_type")
     private String detailType;
@@ -42,9 +43,9 @@ public class StructureFileDetail {
 
     }
 
-    public StructureFileDetail(String headerId,  String detailType, Integer sequenceNo, String fieldName,
+    public StructureFileDetail(StructureFile structureFile,  String detailType, Integer sequenceNo, String fieldName,
                                String mandatory, String dataType, Integer dataLength){
-        this.headerId = headerId;
+        this.structureFile = structureFile;
         this.detailType = detailType;
         this.dataType = dataType;
         this.sequenceNo = sequenceNo;
@@ -61,12 +62,12 @@ public class StructureFileDetail {
         this.id = id;
     }
 
-    public String getHeaderId() {
-        return headerId;
+    public StructureFile getStructureFile() {
+        return structureFile;
     }
 
-    public void setHeaderId(String headerId) {
-        this.headerId = headerId;
+    public void setStructureFile(StructureFile structureFile) {
+        this.structureFile = structureFile;
     }
 
     public String getDetailType() {
@@ -115,5 +116,18 @@ public class StructureFileDetail {
 
     public void setDataLength(Integer dataLength) {
         this.dataLength = dataLength;
+    }
+
+    public Object[] getArrayObject(){
+        Object[] obj = new Object[7];
+        obj[0] = getId();
+        obj[1] = getSequenceNo();
+        obj[2] = getFieldName();
+        obj[3] = getMandatory();
+        obj[4] = getDataType();
+        obj[5] = getDataLength();
+        obj[6] = new Boolean(false);
+
+        return obj;
     }
 }

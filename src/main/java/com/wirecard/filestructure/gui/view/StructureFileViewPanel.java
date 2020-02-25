@@ -144,7 +144,7 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
                 List selectedData = new ArrayList();
 
                 for(int row = 0; row < structureFileTable.getRowCount(); row++){
-                    Boolean checked = (Boolean) structureFileTable.getValueAt(row,4);
+                    Boolean checked = (Boolean) structureFileTable.getValueAt(row,3);
                     if(checked){
                         Object[] data = structureTableModel.getRowData(row);
                        selectedData.add(data);
@@ -161,8 +161,8 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
                 JTable table = (JTable) e.getSource();
                 if(e.getClickCount() == 2){
                     int row = table.getSelectedRow();
-                    System.out.println("row selected id : " + (String) structureTableModel.getValueAt(row,0));
-                    //controller.doDetail(getContainer(), (String) structureTableModel.getValueAt(row,0));
+//                    System.out.println("row selected id : " + (String) structureTableModel.getValueAt(row,0));
+                    controller.doDetail(getContainer(), (String) structureTableModel.getValueAt(row,0), (String)structureTableModel.getValueAt(row,1));
                 }
             }
         });
