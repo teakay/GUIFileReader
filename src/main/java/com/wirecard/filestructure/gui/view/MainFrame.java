@@ -21,11 +21,6 @@ public class MainFrame extends JFrame {
         contentScrollPane = new JScrollPane();
         contentPanel = new JPanel();
 
-        //TODO : if banner needed
-        //BufferedImage myPicture = ImageIO.read(new File("path-to-file"));
-        //JLabel picLabel = new JLabel(new ImageIcon(myPicture));
-        //add(picLabel);
-
         initMenu();
 
         JLabel label = new JLabel();
@@ -56,7 +51,6 @@ public class MainFrame extends JFrame {
         menuList.setName("menuList");
         menuList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         menuList.addListSelectionListener(new MainController());
-        //menuList.setSelectedIndex(0);
         menuScrollPane = new JScrollPane(menuList);
     }
 

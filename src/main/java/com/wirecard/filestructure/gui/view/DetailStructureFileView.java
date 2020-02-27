@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,8 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
     private JLabel titleLabel;
     private JLabel headerId;
     private JTextField nameTextField;
+    private JTextField productTextField;
+    private JTextField projectTextField;
     private JComboBox fileExtensionList;
     private JTable headerTable;
     private JTable detailTable;
@@ -41,179 +44,167 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
         detailTableModel = new InstructionFileTableModel();
         footerTableModel = new InstructionFileTableModel();
 
-        initComponent();
+        initComponentNew();
         localInitialization();
     }
+    private void initComponentNew(){
 
-    public void initComponent(){
-        setLayout(new GridBagLayout());
-        gbc = new GridBagConstraints();
-
-        int row =  0;
-
-        titleLabel = new JLabel("Detail of created file structure");
+        JLabel titleLabel = new JLabel("Detail File Structure");
         titleLabel.setFont(new Font("Arial",Font.BOLD,18));
-        gbc.gridx = 0;
-        gbc.gridy = row;
-        gbc.gridwidth = 3;
-        gbc.insets = new Insets(0,0,20,0);
-        add(titleLabel,gbc);
+        titleLabel.setBackground(Color.GRAY);
+        titleLabel.setOpaque(true);
+        titleLabel.setForeground(Color.WHITE);
 
         headerId = new JLabel();
         headerId.setText("");
         headerId.setVisible(false);
 
-        JLabel nameLabel = new JLabel("Structure File Name");
-        gbc.gridx = 0;
-        gbc.gridy = ++row;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridwidth = 1;
-        gbc.insets = new Insets(0,10,10,10);
-        add(nameLabel, gbc);
-
+        JLabel nameLabel = new JLabel("File Structure Name");
         nameTextField = new JTextField(15);
-        gbc.ipady = 10;
-        gbc.gridx = 1;
-        gbc.gridy = row;
-        gbc.gridwidth = 1;
-        gbc.insets = new Insets(10,0,10,10);
-        add(nameTextField, gbc);
 
         JLabel extensionLabel = new JLabel("File Extension");
-        gbc.gridx = 0;
-        gbc.gridy = ++row;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridwidth = 1;
-        gbc.insets = new Insets(0,10,10,10);
-        add(extensionLabel, gbc);
-
         fileExtensionList = new JComboBox();
         fileExtensionList.addItem("txt");
         fileExtensionList.addItem("csv");
-        gbc.gridx = 1;
-        gbc.gridy = row;
-        gbc.gridwidth = 1;
-        gbc.insets = new Insets(10,0,10,10);
-        add(fileExtensionList, gbc);
 
+        JLabel productLabel = new JLabel("Product Name");
+        productTextField = new JTextField();
 
-        JLabel label = new JLabel("Header");
-        gbc.ipady = 0;
-        gbc.gridx = 0;
-        gbc.gridy = ++row;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridwidth = 3;
-        gbc.insets = new Insets(0,10,0,80);
-        add(label, gbc);
+        JLabel projectLabel = new JLabel("Project Name");
+        projectTextField = new JTextField();
 
+        JLabel headerLabel = new JLabel("Header");
+        headerLabel.setBackground(Color.LIGHT_GRAY);
+        headerLabel.setOpaque(true);
         headerTable = new JTable(headerTableModel);
-        gbc.gridx = 0;
-        gbc.gridy = ++row;
-        gbc.gridwidth = 3;
         headerTable.setFillsViewportHeight(true);
         headerTable.setPreferredScrollableViewportSize( new Dimension( 450, 160 ) );
         JScrollPane scrollPane = new JScrollPane(headerTable);
-        add(scrollPane,gbc);
-
-
         addButton1 = new JButton();
         addButton1.setText("Add");
-        gbc.gridx = 1;
-        gbc.gridy = ++row;
-        gbc.gridwidth = 1;
-        add(addButton1,gbc);
-
         deleteButton1 = new JButton();
         deleteButton1.setText("Delete");
-        gbc.gridx = 2;
-        gbc.gridy = row;
-        gbc.gridwidth = 1;
-        add(deleteButton1,gbc);
 
         JLabel detailLabel = new JLabel("Detail");
-        gbc.gridx = 0;
-        gbc.gridy = ++row;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridwidth = 3;
-        add(detailLabel, gbc);
-
+        detailLabel.setBackground(Color.LIGHT_GRAY);
+        detailLabel.setOpaque(true);
         detailTable = new JTable(detailTableModel);
-        gbc.gridx = 0;
-        gbc.gridy = ++row;
-        gbc.gridwidth = 3;
         detailTable.setFillsViewportHeight(true);
         detailTable.setPreferredScrollableViewportSize( new Dimension( 450, 160 ) );
-
         JScrollPane scrollPaneDetail = new JScrollPane(detailTable);
-        add(scrollPaneDetail,gbc);
-
         addButton2 = new JButton();
         addButton2.setText("Add");
-        gbc.gridx = 1;
-        gbc.gridy = ++row;
-        gbc.gridwidth = 1;
-        add(addButton2,gbc);
-
         deleteButton2 = new JButton();
         deleteButton2.setText("Delete");
-        gbc.gridx = 2;
-        gbc.gridy = row;
-        gbc.gridwidth = 1;
-        add(deleteButton2,gbc);
 
         JLabel footerLabel = new JLabel("Footer");
-        gbc.gridx = 0;
-        gbc.gridy = ++row;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridwidth = 3;
-        add(footerLabel, gbc);
-
+        footerLabel.setBackground(Color.LIGHT_GRAY);
+        footerLabel.setOpaque(true);
         footerTable = new JTable(footerTableModel);
-        gbc.gridx = 0;
-        gbc.gridy = ++row;
-        gbc.gridwidth = 3;
         footerTable.setFillsViewportHeight(true);
         footerTable.setPreferredScrollableViewportSize( new Dimension( 450, 160 ) );
-
         JScrollPane scrollPaneFooter = new JScrollPane(footerTable);
-        add(scrollPaneFooter,gbc);
-
         addButton3 = new JButton();
         addButton3.setText("Add");
-        gbc.gridx = 1;
-        gbc.gridy = ++row;
-        gbc.gridwidth = 1;
-        add(addButton3,gbc);
-
         deleteButton3 = new JButton();
         deleteButton3.setText("Delete");
-        gbc.gridx = 2;
-        gbc.gridy = row;
-        gbc.gridwidth = 1;
-        add(deleteButton3,gbc);
-
-        JSeparator separator = new JSeparator();
-        separator.setOrientation(SwingConstants.HORIZONTAL);
-        gbc.gridx = 0;
-        gbc.gridy = ++row;
-        gbc.gridwidth = 3;
-        add(separator,gbc);
 
         backButton = new JButton();
         backButton.setText("Back");
-        gbc.gridx = 0;
-        gbc.gridy = ++row;
-        gbc.gridwidth = 1;
-        add(backButton,gbc);
-
         saveButton = new JButton();
         saveButton.setText("Save");
-        gbc.gridx = 1;
-        gbc.gridy = row;
-        gbc.anchor = GridBagConstraints.EAST;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10,10,10,10);
-        add(saveButton,gbc);
+
+
+        GroupLayout layout = new GroupLayout(this);
+        setLayout(layout);
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+
+        layout.setHorizontalGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(titleLabel,0,GroupLayout.DEFAULT_SIZE,Short.MAX_VALUE)
+                        .addComponent(headerId)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(nameLabel)
+                                        .addComponent(extensionLabel)
+                                        .addComponent(productLabel)
+                                        .addComponent(projectLabel)
+                                )
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(nameTextField,0,100,200)
+                                        .addComponent(fileExtensionList,0,100,200)
+                                        .addComponent(productTextField,0,100,200)
+                                        .addComponent(projectTextField,0,100,200)
+                                )
+                        )
+                        .addComponent(headerLabel,0,GroupLayout.DEFAULT_SIZE,Short.MAX_VALUE)
+                        .addComponent(scrollPane)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(addButton1)
+                                .addComponent(deleteButton1)
+                        )
+                        .addComponent(detailLabel,0,GroupLayout.DEFAULT_SIZE,Short.MAX_VALUE)
+                        .addComponent(scrollPaneDetail)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(addButton2)
+                                .addComponent(deleteButton2)
+                        )
+                        .addComponent(footerLabel,0,GroupLayout.DEFAULT_SIZE,Short.MAX_VALUE)
+                        .addComponent(scrollPaneFooter)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(addButton3)
+                                .addComponent(deleteButton3)
+                        )
+                )
+                .addGroup(layout.createSequentialGroup()
+                        .addComponent(backButton)
+                        .addComponent(saveButton)
+                )
+        );
+
+        layout.setVerticalGroup(layout.createSequentialGroup()
+                .addComponent(titleLabel)
+                .addComponent(headerId)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(nameLabel)
+                        .addComponent(nameTextField)
+                )
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(extensionLabel)
+                        .addComponent(fileExtensionList)
+                )
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(productLabel)
+                        .addComponent(productTextField)
+                )
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(projectLabel)
+                        .addComponent(projectTextField)
+                )
+                .addComponent(headerLabel)
+                .addComponent(scrollPane)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(addButton1)
+                        .addComponent(deleteButton1)
+                )
+                .addComponent(detailLabel)
+                .addComponent(scrollPaneDetail)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(addButton2)
+                        .addComponent(deleteButton2)
+                )
+                .addComponent(footerLabel)
+                .addComponent(scrollPaneFooter)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(addButton3)
+                        .addComponent(deleteButton3)
+                )
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(backButton)
+                        .addComponent(saveButton)
+                )
+        );
     }
 
     public void localInitialization(){
@@ -231,47 +222,88 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
         addButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                headerTableModel.addRow(new Object[]{null,headerTableModel.getRowCount()+1,null,null,null,null,false});
+                headerTableModel.addRow(new Object[]{null,headerTableModel.getRowCount()+1,null,null,null,null,null,null,false});
             }
         });
         deleteButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                headerTableModel.deleteRow();
+                List selectedData = new ArrayList();
+
+                for(int row = 0; row < headerTable.getRowCount(); row++){
+                    Boolean checked = (Boolean) headerTable.getValueAt(row,7);
+                    if(checked){
+                        Object[] data = headerTableModel.getRowData(row);
+                        selectedData.add(data);
+                    }
+                }
+                if(selectedData.isEmpty()){
+                    headerTableModel.deleteRow();
+                }else {
+                    headerTableModel.deleteRow(selectedData);
+                }
             }
         });
 
         addButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                detailTableModel.addRow(new Object[]{null,detailTableModel.getRowCount()+1,null,null,null,null,false});
+                detailTableModel.addRow(new Object[]{null,detailTableModel.getRowCount()+1,null,null,null,null,null,null,false});
             }
         });
 
         deleteButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                detailTableModel.deleteRow();
+                List selectedData = new ArrayList();
+
+                for(int row = 0; row < detailTable.getRowCount(); row++){
+                    Boolean checked = (Boolean) detailTable.getValueAt(row,7);
+                    if(checked){
+                        Object[] data = detailTableModel.getRowData(row);
+                        selectedData.add(data);
+                    }
+                }
+                if(selectedData.isEmpty()){
+                    detailTableModel.deleteRow();
+                }else {
+                    detailTableModel.deleteRow(selectedData);
+                }
             }
         });
 
         addButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                footerTableModel.addRow(new Object[]{null,footerTableModel.getRowCount()+1,null,null,null,null,false});
+                footerTableModel.addRow(new Object[]{null,footerTableModel.getRowCount()+1,null,null,null,null,null,null,false});
             }
         });
         deleteButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                footerTableModel.deleteRow();
+                List selectedData = new ArrayList();
+
+                for(int row = 0; row < footerTable.getRowCount(); row++){
+                    Boolean checked = (Boolean) footerTable.getValueAt(row,7);
+                    if(checked){
+                        Object[] data = footerTableModel.getRowData(row);
+                        selectedData.add(data);
+                    }
+                }
+                if(selectedData.isEmpty()){
+                    footerTableModel.deleteRow();
+                }else {
+                    footerTableModel.deleteRow(selectedData);
+                }
             }
         });
 
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.doUpdate(getContainer(),headerId.getText(), headerTableModel.getAllData(), detailTableModel.getAllData(), footerTableModel.getAllData());
+                controller.doUpdate(getContainer(),headerId.getText(),
+                        nameTextField.getText(), productTextField.getText(), projectTextField.getText(),
+                        headerTableModel.getAllData(),detailTableModel.getAllData(), footerTableModel.getAllData());
             }
         });
     }
@@ -279,6 +311,8 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
     public void setData(Map data){
         nameTextField.setText((String)data.get("fileName"));
         headerId.setText((String)data.get("parentId"));
+        productTextField.setText((String)data.get("productName"));
+        projectTextField.setText((String)data.get("projectName"));
 
         if("txt".equals((String)data.get("fileExtension"))) {
             fileExtensionList.setSelectedIndex(0);
@@ -295,9 +329,4 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
         return this;
     }
 
-
-    @Override
-    public void modelPropertyChange(PropertyChangeEvent evt) {
-
-    }
 }

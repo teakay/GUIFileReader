@@ -78,8 +78,10 @@ public class StructureFileService {
         try {
             String structureName = (String) dataMap.get("structureName");
             String extension = (String) dataMap.get("extension");
+            String productName = (String) dataMap.get("productName");
+            String projectName = (String) dataMap.get("projectName");
 
-            StructureFile structureFile = new StructureFile(structureName, extension, new Date());
+            StructureFile structureFile = new StructureFile(structureName, extension,  productName, projectName, new Date());
 
             List<Object[]> headerData = (List<Object[]>) dataMap.get("headerData");
             List<Object[]> detailData = (List<Object[]>) dataMap.get("detailData");
@@ -94,7 +96,8 @@ public class StructureFileService {
 
             for (int i = 0; i < headerData.size(); i++) {
                 StructureFileDetail sfd = new StructureFileDetail(structureFile, "header", (Integer) headerData.get(i)[1], (String) headerData.get(i)[2],
-                        (String) headerData.get(i)[3], (String) headerData.get(i)[4], (Integer) headerData.get(i)[5]);
+                        (String) headerData.get(i)[3], (String) headerData.get(i)[4], (Integer) headerData.get(i)[5],
+                        (String) headerData.get(i)[6],(String) headerData.get(i)[7]);
                 session.save(sfd);
                 if (i % 10 == 0) {
                     session.flush();
@@ -103,7 +106,8 @@ public class StructureFileService {
             }
             for (int i = 0; i < detailData.size(); i++) {
                 StructureFileDetail sfd = new StructureFileDetail(structureFile, "detail", (Integer) detailData.get(i)[1], (String) detailData.get(i)[2],
-                        (String) detailData.get(i)[3], (String) detailData.get(i)[4], (Integer) detailData.get(i)[5]);
+                        (String) detailData.get(i)[3], (String) detailData.get(i)[4], (Integer) detailData.get(i)[5],
+                        (String) detailData.get(i)[6],(String) detailData.get(i)[7]);
                 session.save(sfd);
                 if (i % 10 == 0) {
                     session.flush();
@@ -112,7 +116,8 @@ public class StructureFileService {
             }
             for (int i = 0; i < footerData.size(); i++) {
                 StructureFileDetail sfd = new StructureFileDetail(structureFile, "footer", (Integer) footerData.get(i)[1], (String) footerData.get(i)[2],
-                        (String) footerData.get(i)[3], (String) footerData.get(i)[4], (Integer) footerData.get(i)[5]);
+                        (String) footerData.get(i)[3], (String) footerData.get(i)[4], (Integer) footerData.get(i)[5],
+                        (String) footerData.get(i)[6],(String) footerData.get(i)[7]);
                 session.save(sfd);
                 if (i % 10 == 0) {
                     session.flush();
@@ -154,14 +159,21 @@ public class StructureFileService {
             q.setString("id", (String)dataMap.get("parentId"));
 
             StructureFile structureFile = (StructureFile) q.uniqueResult();
+            structureFile.setStructureName((String)dataMap.get("fileName"));
+            structureFile.setProductName((String)dataMap.get("productName"));
+            structureFile.setProjectName((String)dataMap.get("projectName"));
+
+            session.saveOrUpdate(structureFile);
 
             List<Object[]> headerData = (List<Object[]>) dataMap.get("headerData");
             List<Object[]> detailData = (List<Object[]>) dataMap.get("detailData");
             List<Object[]> footerData = (List<Object[]>) dataMap.get("footerData");
 
             for (int i = 0; i < headerData.size(); i++) {
-                StructureFileDetail sfd = new StructureFileDetail((String)headerData.get(i)[0],structureFile, "header", (Integer) headerData.get(i)[1], (String) headerData.get(i)[2],
-                        (String) headerData.get(i)[3], (String) headerData.get(i)[4], (Integer) headerData.get(i)[5]);
+                StructureFileDetail sfd = new StructureFileDetail((String)headerData.get(i)[0],structureFile,
+                        "header", (Integer) headerData.get(i)[1], (String) headerData.get(i)[2],
+                        (String) headerData.get(i)[3], (String) headerData.get(i)[4], (Integer) headerData.get(i)[5],
+                        (String) headerData.get(i)[6], (String) headerData.get(i)[7]);
                 session.saveOrUpdate(sfd);
                 if (i % 10 == 0) {
                     session.flush();
@@ -170,7 +182,8 @@ public class StructureFileService {
             }
             for (int i = 0; i < detailData.size(); i++) {
                 StructureFileDetail sfd = new StructureFileDetail((String)detailData.get(i)[0],structureFile, "detail", (Integer) detailData.get(i)[1], (String) detailData.get(i)[2],
-                        (String) detailData.get(i)[3], (String) detailData.get(i)[4], (Integer) detailData.get(i)[5]);
+                        (String) detailData.get(i)[3], (String) detailData.get(i)[4], (Integer) detailData.get(i)[5],
+                        (String) detailData.get(i)[6],(String) detailData.get(i)[7]);
                 session.saveOrUpdate(sfd);
                 if (i % 10 == 0) {
                     session.flush();
@@ -179,7 +192,8 @@ public class StructureFileService {
             }
             for (int i = 0; i < footerData.size(); i++) {
                 StructureFileDetail sfd = new StructureFileDetail((String)footerData.get(i)[0],structureFile, "footer", (Integer) footerData.get(i)[1], (String) footerData.get(i)[2],
-                        (String) footerData.get(i)[3], (String) footerData.get(i)[4], (Integer) footerData.get(i)[5]);
+                        (String) footerData.get(i)[3], (String) footerData.get(i)[4], (Integer) footerData.get(i)[5],
+                        (String) footerData.get(i)[6], (String) footerData.get(i)[7]);
                 session.saveOrUpdate(sfd);
                 if (i % 10 == 0) {
                     session.flush();

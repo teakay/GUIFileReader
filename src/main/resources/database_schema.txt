@@ -16,5 +16,7 @@ sfd_data_type varchar(10),
 sfd_data_sequence int,
 sfd_data_field_name varchar(255),
 sfd_data_mandatory varchar(2),
-sfd_data_length int
+sfd_data_length int,
+sfd_sample text,
+sfd_description text
 );

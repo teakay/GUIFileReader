@@ -2,7 +2,6 @@ package com.wirecard.filestructure.gui.model;
 
 import com.wirecard.filestructure.gui.utils.Constants;
 
-import javax.jws.Oneway;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +46,10 @@ public class InstructionFileTableModel extends AbstractTableModel {
         }else if(col == 5){
             return Integer.class;
         }else if(col == 6){
+            return String.class;
+        }else if(col == 7){
+            return String.class;
+        }else if(col == 8){
             return Boolean.class;
         }
         else{
@@ -69,10 +72,19 @@ public class InstructionFileTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
+    public void deleteRow(List dataRow){
+        data.removeAll(dataRow);
+        fireTableDataChanged();
+    }
+
+    public Object[] getRowData(int row){
+        return data.get(row);
+    }
+
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex)
     {
-        if(columnIndex == 0 || columnIndex == 1){
+        if(columnIndex == 0){
             return false;
         }else {
             return true;

@@ -1,6 +1,5 @@
 package com.wirecard.filestructure.gui.controller;
 
-import com.wirecard.filestructure.gui.model.StructureFileModel;
 import com.wirecard.filestructure.gui.utils.Constants;
 import com.wirecard.filestructure.gui.view.*;
 
@@ -22,10 +21,7 @@ public class MainController implements ListSelectionListener {
                 StructureFileController controller = new StructureFileController();
                 StructureFileViewPanel view = new StructureFileViewPanel(controller);
                 controller.addView(view);
-                controller.addModel(new StructureFileModel());
-
                 mainFrame.setContentPanel(view);
-
             } else if (Constants.MENU[1].equals(selectedMenu)) {
                 TemplateView templateView = new TemplateView();
                 mainFrame.setContentScrollPane(templateView);
