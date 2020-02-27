@@ -24,23 +24,23 @@ public class MainController implements ListSelectionListener {
                 controller.addView(view);
                 controller.addModel(new StructureFileModel());
 
-                mainFrame.setContent(view);
+                mainFrame.setContentPanel(view);
 
             } else if (Constants.MENU[1].equals(selectedMenu)) {
                 TemplateView templateView = new TemplateView();
-                mainFrame.setContent(templateView);
+                mainFrame.setContentScrollPane(templateView);
             } else if (Constants.MENU[2].equals(selectedMenu)) {
                 ParserView parserView = new ParserView();
-                mainFrame.setContent(parserView);
+                mainFrame.setContentScrollPane(parserView);
             } else if (Constants.MENU[3].equals(selectedMenu)) {
                 FileCreatorView fileCreatorView = new FileCreatorView();
-                mainFrame.setContent(fileCreatorView);
+                mainFrame.setContentScrollPane(fileCreatorView);
             } else {
                 JLabel label = new JLabel();
                 label.setHorizontalAlignment(JLabel.CENTER);
                 label.setText("This is content panel");
 
-                mainFrame.setContent(label);
+                mainFrame.setContentPanel(label);
             }
         }
     }

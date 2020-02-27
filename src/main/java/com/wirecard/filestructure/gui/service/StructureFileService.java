@@ -15,8 +15,9 @@ public class StructureFileService {
 
     private static String QUERY_GET_ALL_STRUCTURE_FILE_LIST = "from StructureFile s order by s.createdDate";
     private static String QUERY_DELETE_ROW_BY_ID = "delete from StructureFile s where s.id = :id";
-    private static String QUERY_DELETE_DETAIL_ROW_BY_ID = "delete from StructureFileDetail sd where sd.headerId = :headerId";
+    private static String QUERY_DELETE_DETAIL_ROW_BY_ID = "delete from StructureFileDetail sd where sd.structureFile.id = :headerId";
     private static String QUERY_GET_DETAIL_BY_ID = "from StructureFileDetail sd where sd.structureFile.id = :id";
+    private static String QUERY_GET_STRUCTURE_FILE_BY_ID = "from StructureFile s where s.id = :id";
 
     public static List getStructureFileList() throws Exception {
         List<Object[]> returnList = new ArrayList<Object[]>();
@@ -30,12 +31,14 @@ public class StructureFileService {
 
             for (int i = 0; i < resultList.size(); i++) {
                 StructureFile structureFile = (StructureFile) resultList.get(i);
-                Object[] dataList = new Object[5];
+                Object[] dataList = new Object[7];
                 dataList[0] = structureFile.getId();
                 dataList[1] = structureFile.getStructureName();
                 dataList[2] = structureFile.getExtension();
-                dataList[3] = structureFile.getCreatedDate();
-                dataList[4] = new Boolean(false);
+                dataList[3] = structureFile.getProductName();
+                dataList[4] = structureFile.getProjectName();
+                dataList[5] = structureFile.getCreatedDate();
+                dataList[6] = new Boolean(false);
 
                 returnList.add(dataList);
             }
@@ -144,17 +147,20 @@ public class StructureFileService {
             String structureName = (String) dataMap.get("structureName");
             String extension = (String) dataMap.get("extension");
 
-            StructureFile structureFile = new StructureFile(structureName, extension, new Date());
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+
+            Query q = session.createQuery(QUERY_GET_STRUCTURE_FILE_BY_ID);
+            q.setString("id", (String)dataMap.get("parentId"));
+
+            StructureFile structureFile = (StructureFile) q.uniqueResult();
 
             List<Object[]> headerData = (List<Object[]>) dataMap.get("headerData");
             List<Object[]> detailData = (List<Object[]>) dataMap.get("detailData");
             List<Object[]> footerData = (List<Object[]>) dataMap.get("footerData");
 
-            Session session = HibernateUtil.getSessionFactory().openSession();
-            session.beginTransaction();
-
             for (int i = 0; i < headerData.size(); i++) {
-                StructureFileDetail sfd = new StructureFileDetail(structureFile, "header", (Integer) headerData.get(i)[1], (String) headerData.get(i)[2],
+                StructureFileDetail sfd = new StructureFileDetail((String)headerData.get(i)[0],structureFile, "header", (Integer) headerData.get(i)[1], (String) headerData.get(i)[2],
                         (String) headerData.get(i)[3], (String) headerData.get(i)[4], (Integer) headerData.get(i)[5]);
                 session.saveOrUpdate(sfd);
                 if (i % 10 == 0) {
@@ -163,7 +169,7 @@ public class StructureFileService {
                 }
             }
             for (int i = 0; i < detailData.size(); i++) {
-                StructureFileDetail sfd = new StructureFileDetail(structureFile, "detail", (Integer) detailData.get(i)[1], (String) detailData.get(i)[2],
+                StructureFileDetail sfd = new StructureFileDetail((String)detailData.get(i)[0],structureFile, "detail", (Integer) detailData.get(i)[1], (String) detailData.get(i)[2],
                         (String) detailData.get(i)[3], (String) detailData.get(i)[4], (Integer) detailData.get(i)[5]);
                 session.saveOrUpdate(sfd);
                 if (i % 10 == 0) {
@@ -172,7 +178,7 @@ public class StructureFileService {
                 }
             }
             for (int i = 0; i < footerData.size(); i++) {
-                StructureFileDetail sfd = new StructureFileDetail(structureFile, "footer", (Integer) footerData.get(i)[1], (String) footerData.get(i)[2],
+                StructureFileDetail sfd = new StructureFileDetail((String)footerData.get(i)[0],structureFile, "footer", (Integer) footerData.get(i)[1], (String) footerData.get(i)[2],
                         (String) footerData.get(i)[3], (String) footerData.get(i)[4], (Integer) footerData.get(i)[5]);
                 session.saveOrUpdate(sfd);
                 if (i % 10 == 0) {

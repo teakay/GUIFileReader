@@ -17,6 +17,8 @@ public class AddStructureFileView extends AbstractViewPanel {
     private GridBagConstraints gbc;
     private JTextField nameTextField;
     private JComboBox fileExtensionList;
+    private JTextField productTextField;
+    private JTextField projectTextField;
     private JTable headerTable;
     private JTable detailTable;
     private JTable footerTable;
@@ -39,16 +41,135 @@ public class AddStructureFileView extends AbstractViewPanel {
         detailTableModel = new InstructionFileTableModel();
         footerTableModel = new InstructionFileTableModel();
 
-        initComponent();
+        initComponentNew();
         localInitialization();
     }
+    private void initComponentNew(){
+
+        JLabel titleLabel = new JLabel("Add File Structure");
+        titleLabel.setFont(new Font("Arial",Font.BOLD,18));
+
+        JLabel nameLabel = new JLabel("File Structure Name");
+        nameTextField = new JTextField(15);
+
+        JLabel extensionLabel = new JLabel("File Extension");
+        fileExtensionList = new JComboBox();
+        fileExtensionList.addItem("txt");
+        fileExtensionList.addItem("csv");
+
+        JLabel productLabel = new JLabel("Product Name");
+        productTextField = new JTextField();
+
+        JLabel projectLabel = new JLabel("Project Name");
+        projectTextField = new JTextField();
+
+        JLabel headerLabel = new JLabel("Header");
+        headerLabel.setBackground(Color.LIGHT_GRAY);
+        headerLabel.setOpaque(true);
+        headerTable = new JTable(headerTableModel);
+        headerTable.setFillsViewportHeight(true);
+        headerTable.setPreferredScrollableViewportSize( new Dimension( 450, 160 ) );
+        JScrollPane scrollPane = new JScrollPane(headerTable);
+        addButton1 = new JButton();
+        addButton1.setText("Add");
+        deleteButton1 = new JButton();
+        deleteButton1.setText("Delete");
+
+        JLabel detailLabel = new JLabel("Detail");
+        detailLabel.setBackground(Color.LIGHT_GRAY);
+        detailLabel.setOpaque(true);
+        detailTable = new JTable(detailTableModel);
+        detailTable.setFillsViewportHeight(true);
+        detailTable.setPreferredScrollableViewportSize( new Dimension( 450, 160 ) );
+        JScrollPane scrollPaneDetail = new JScrollPane(detailTable);
+        addButton2 = new JButton();
+        addButton2.setText("Add");
+        deleteButton2 = new JButton();
+        deleteButton2.setText("Delete");
+
+        JLabel footerLabel = new JLabel("Footer");
+        footerLabel.setBackground(Color.LIGHT_GRAY);
+        footerLabel.setOpaque(true);
+        footerTable = new JTable(footerTableModel);
+        footerTable.setFillsViewportHeight(true);
+        footerTable.setPreferredScrollableViewportSize( new Dimension( 450, 160 ) );
+        JScrollPane scrollPaneFooter = new JScrollPane(footerTable);
+        addButton3 = new JButton();
+        addButton3.setText("Add");
+        deleteButton3 = new JButton();
+        deleteButton3.setText("Delete");
+
+        backButton = new JButton();
+        backButton.setText("Back");
+        saveButton = new JButton();
+        saveButton.setText("Save");
+
+
+        GroupLayout layout = new GroupLayout(this);
+        setLayout(layout);
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+
+        layout.setHorizontalGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(titleLabel)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(nameLabel)
+                                        .addComponent(extensionLabel)
+                                        .addComponent(productLabel)
+                                        .addComponent(projectLabel)
+                                )
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(nameTextField,0,100,200)
+                                        .addComponent(fileExtensionList,0,100,200)
+                                        .addComponent(productTextField,0,100,200)
+                                        .addComponent(projectTextField,0,100,200)
+                                )
+                            )
+                        .addComponent(headerLabel,0,GroupLayout.DEFAULT_SIZE,Short.MAX_VALUE)
+                        .addComponent(scrollPane)
+                        .addComponent(detailLabel,0,GroupLayout.DEFAULT_SIZE,Short.MAX_VALUE)
+                        .addComponent(scrollPaneDetail)
+                        .addComponent(footerLabel,0,GroupLayout.DEFAULT_SIZE,Short.MAX_VALUE)
+                        .addComponent(scrollPaneFooter)
+                )
+        );
+
+        layout.setVerticalGroup(layout.createSequentialGroup()
+                .addComponent(titleLabel)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(nameLabel)
+                        .addComponent(nameTextField)
+                )
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(extensionLabel)
+                        .addComponent(fileExtensionList)
+                )
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(productLabel)
+                        .addComponent(productTextField)
+                )
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(projectLabel)
+                        .addComponent(projectTextField)
+                )
+                .addComponent(headerLabel)
+                .addComponent(scrollPane)
+                .addComponent(detailLabel)
+                .addComponent(scrollPaneDetail)
+                .addComponent(footerLabel)
+                .addComponent(scrollPaneFooter)
+        );
+    }
+
     private void initComponent() {
         setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
 
         int row =  0;
 
-        JLabel titleLabel = new JLabel("Create New File Structure");
+        JLabel titleLabel = new JLabel("Add File Structure");
         titleLabel.setFont(new Font("Arial",Font.BOLD,18));
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -56,7 +177,7 @@ public class AddStructureFileView extends AbstractViewPanel {
         gbc.insets = new Insets(0,0,20,0);
         add(titleLabel,gbc);
 
-        JLabel nameLabel = new JLabel("Structure File Name");
+        JLabel nameLabel = new JLabel("File Structure Name");
         gbc.gridx = 0;
         gbc.gridy = ++row;
         gbc.fill = GridBagConstraints.HORIZONTAL;

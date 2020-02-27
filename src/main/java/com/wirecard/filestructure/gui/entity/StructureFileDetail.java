@@ -43,6 +43,18 @@ public class StructureFileDetail {
 
     }
 
+    public StructureFileDetail(String id, StructureFile structureFile,  String detailType, Integer sequenceNo, String fieldName,
+                               String mandatory, String dataType, Integer dataLength){
+        this.id = id;
+        this.structureFile = structureFile;
+        this.detailType = detailType;
+        this.dataType = dataType;
+        this.sequenceNo = sequenceNo;
+        this.fieldName = fieldName;
+        this.mandatory = mandatory;
+        this.dataLength = dataLength;
+    }
+
     public StructureFileDetail(StructureFile structureFile,  String detailType, Integer sequenceNo, String fieldName,
                                String mandatory, String dataType, Integer dataLength){
         this.structureFile = structureFile;
@@ -110,12 +122,12 @@ public class StructureFileDetail {
         this.mandatory = mandatory;
     }
 
-    public Integer getDataLength() {
-        return dataLength;
-    }
-
     public void setDataLength(Integer dataLength) {
         this.dataLength = dataLength;
+    }
+
+    public Integer getDataLength() {
+        return dataLength;
     }
 
     public Object[] getArrayObject(){

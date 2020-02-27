@@ -33,10 +33,79 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
         this.controller = controller;
         structureTableModel = new StructureTableModel();
 
-        initComponent();
+        initComponentNew();
         localInitialization();
     }
 
+    public void initComponentNew(){
+        JLabel titleLabel = new JLabel("File Structure");
+        titleLabel.setFont(new Font("Arial",Font.BOLD,18));
+
+        JLabel label = new JLabel("Find file structure");
+
+        searchText =  new JTextField(18);
+        searchButton = new JButton();
+        searchButton.setText("Search");
+
+        JLabel tableLabel = new JLabel("File Structure Listing");
+        tableLabel.setBackground(Color.LIGHT_GRAY);
+        tableLabel.setOpaque(true);
+
+        structureFileTable = new JTable(structureTableModel);
+        rowSorter = new TableRowSorter<TableModel>(structureFileTable.getModel());
+        structureFileTable.setRowSorter(rowSorter);
+        structureFileTable.setFillsViewportHeight(true);
+
+        JScrollPane scrollPane = new JScrollPane(structureFileTable);
+
+        addButton = new JButton();
+        addButton.setText("Add");
+
+        deleteButton = new JButton();
+        deleteButton.setText("Delete");
+
+        GroupLayout layout = new GroupLayout(this);
+        setLayout(layout);
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+        layout.setHorizontalGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(titleLabel)
+                        .addGroup(layout.createSequentialGroup()
+                                        .addComponent(label)
+                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(searchText,0,100,200)
+                                                        .addComponent(searchButton)
+                                                )
+                                                .addComponent(tableLabel,0,GroupLayout.DEFAULT_SIZE,Short.MAX_VALUE)
+                                                .addComponent(scrollPane)
+                                                .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(addButton)
+                                                        .addComponent(deleteButton)
+                                                )
+                                        )
+                        )
+
+                )
+
+        );
+        layout.setVerticalGroup(layout.createSequentialGroup()
+                .addComponent(titleLabel)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(label)
+                    .addComponent(searchText)
+                    .addComponent(searchButton)
+                )
+                .addComponent(tableLabel)
+                .addComponent(scrollPane)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(addButton)
+                        .addComponent(deleteButton)
+                )
+        );
+
+    }
     private void initComponent(){
         setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
@@ -144,7 +213,7 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
                 List selectedData = new ArrayList();
 
                 for(int row = 0; row < structureFileTable.getRowCount(); row++){
-                    Boolean checked = (Boolean) structureFileTable.getValueAt(row,3);
+                    Boolean checked = (Boolean) structureFileTable.getValueAt(row,5);
                     if(checked){
                         Object[] data = structureTableModel.getRowData(row);
                        selectedData.add(data);
@@ -161,7 +230,6 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
                 JTable table = (JTable) e.getSource();
                 if(e.getClickCount() == 2){
                     int row = table.getSelectedRow();
-//                    System.out.println("row selected id : " + (String) structureTableModel.getValueAt(row,0));
                     controller.doDetail(getContainer(), (String) structureTableModel.getValueAt(row,0), (String)structureTableModel.getValueAt(row,1));
                 }
             }

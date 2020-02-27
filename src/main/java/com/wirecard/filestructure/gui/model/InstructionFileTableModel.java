@@ -59,6 +59,11 @@ public class InstructionFileTableModel extends AbstractTableModel {
        fireTableDataChanged();
     }
 
+    public void addRow(List dataList){
+        data.addAll(dataList);
+        fireTableDataChanged();
+    }
+
     public void deleteRow(){
         data.remove(getRowCount()-1);
         fireTableDataChanged();

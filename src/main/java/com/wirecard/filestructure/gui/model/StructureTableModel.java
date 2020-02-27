@@ -33,7 +33,7 @@ public class StructureTableModel extends AbstractTableModel {
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex)
     {
-        if(columnIndex == 4) {
+        if(columnIndex == 6) {
             return true;
         }else{
             return false;
@@ -49,7 +49,14 @@ public class StructureTableModel extends AbstractTableModel {
            return String.class;
        }else if(col == 3){
            return String.class;
-       }else if(col == 4){
+       }
+       else if(col == 4){
+           return String.class;
+       }
+       else if(col == 5){
+           return String.class;
+       }
+       else if(col == 6){
            return Boolean.class;
        }else{
            return String.class;

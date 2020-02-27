@@ -30,7 +30,7 @@ public class StructureFileController extends AbstractController {
         addView(addView);
 
         MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(view);
-        mainFrame.setContent(addView);
+        mainFrame.setContentScrollPane(addView);
     }
 
     public void doBack(AbstractViewPanel view){
@@ -39,7 +39,7 @@ public class StructureFileController extends AbstractController {
         addView(structureView);
 
         MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(view);
-        mainFrame.setContent(structureView);
+        mainFrame.setContentScrollPane(structureView);
     }
 
     public void doDelete(List<Object[]> data){
@@ -68,7 +68,7 @@ public class StructureFileController extends AbstractController {
             addView(structureView);
 
             MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(view);
-            mainFrame.setContent(structureView);
+            mainFrame.setContentScrollPane(structureView);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -86,23 +86,38 @@ public class StructureFileController extends AbstractController {
 
         map.put("fileName", structureFile.getStructureName());
         map.put("fileExtension",structureFile.getExtension());
+        map.put("parentId",structureFile.getId());
+
+        List headerTableList = new ArrayList();
+        List detailTableList = new ArrayList();
+        List footerTableList = new ArrayList();
 
         for(int i = 0; i < detailList.size(); i++){
-            map.put(((StructureFileDetail)detailList.get(i)).getDetailType(),((StructureFileDetail)detailList.get(i)).getArrayObject());
+            StructureFileDetail sfd = (StructureFileDetail)detailList.get(i);
+            if("header".equals(sfd.getDetailType())){
+                headerTableList.add(sfd.getArrayObject());
+            }else if("detail".equals(sfd.getDetailType())){
+                detailTableList.add(sfd.getArrayObject());
+            }else if("footer".equals(sfd.getDetailType())){
+                footerTableList.add(sfd.getArrayObject());
+            }
         }
+        map.put("header",headerTableList);
+        map.put("detail",detailTableList);
+        map.put("footer",footerTableList);
+
 
         detailView.setData(map);
 
         MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(view);
-        mainFrame.setContent(detailView);
+        mainFrame.setContentScrollPane(detailView);
     }
 
-    public void doUpdate(AbstractViewPanel view, String structureName, String extension, List headerData, List detailData, List footerData){
+    public void doUpdate(AbstractViewPanel view, String parentId, List headerData, List detailData, List footerData){
         try{
             Map dataMap = new HashMap();
 
-            dataMap.put("structureName",structureName);
-            dataMap.put("extension",extension);
+            dataMap.put("parentId",parentId);
             dataMap.put("headerData",headerData);
             dataMap.put("detailData",detailData);
             dataMap.put("footerData",footerData);
@@ -114,7 +129,7 @@ public class StructureFileController extends AbstractController {
             addView(structureView);
 
             MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(view);
-            mainFrame.setContent(structureView);
+            mainFrame.setContentScrollPane(structureView);
         }catch (Exception e){
             e.printStackTrace();
         }

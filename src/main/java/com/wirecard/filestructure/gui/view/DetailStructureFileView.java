@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.List;
 import java.util.Map;
 
 public class DetailStructureFileView extends  AbstractViewPanel  {
@@ -15,6 +16,7 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
     private StructureFileController controller;
     private GridBagConstraints gbc;
     private JLabel titleLabel;
+    private JLabel headerId;
     private JTextField nameTextField;
     private JComboBox fileExtensionList;
     private JTable headerTable;
@@ -56,6 +58,10 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
         gbc.gridwidth = 3;
         gbc.insets = new Insets(0,0,20,0);
         add(titleLabel,gbc);
+
+        headerId = new JLabel();
+        headerId.setText("");
+        headerId.setVisible(false);
 
         JLabel nameLabel = new JLabel("Structure File Name");
         gbc.gridx = 0;
@@ -211,6 +217,10 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
     }
 
     public void localInitialization(){
+        headerTable.removeColumn(headerTable.getColumnModel().getColumn(0));
+        detailTable.removeColumn(detailTable.getColumnModel().getColumn(0));
+        footerTable.removeColumn(footerTable.getColumnModel().getColumn(0));
+
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -261,14 +271,14 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.doUpdate(getContainer(),nameTextField.getText(), (String)fileExtensionList.getSelectedItem(),headerTableModel.getAllData(), detailTableModel.getAllData(), footerTableModel.getAllData());
+                controller.doUpdate(getContainer(),headerId.getText(), headerTableModel.getAllData(), detailTableModel.getAllData(), footerTableModel.getAllData());
             }
         });
     }
 
     public void setData(Map data){
         nameTextField.setText((String)data.get("fileName"));
-        nameTextField.setEnabled(false);
+        headerId.setText((String)data.get("parentId"));
 
         if("txt".equals((String)data.get("fileExtension"))) {
             fileExtensionList.setSelectedIndex(0);
@@ -277,9 +287,9 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
         }
         fileExtensionList.setEnabled(false);
 
-        headerTableModel.addRow((Object[])data.get("header"));
-        detailTableModel.addRow((Object[])data.get("detail"));
-        footerTableModel.addRow((Object[])data.get("footer"));
+        headerTableModel.addRow((List)data.get("header"));
+        detailTableModel.addRow((List)data.get("detail"));
+        footerTableModel.addRow((List)data.get("footer"));
     }
     private AbstractViewPanel getContainer(){
         return this;
