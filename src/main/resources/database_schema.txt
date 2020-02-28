@@ -1,12 +1,11 @@
 CREATE TABLE structure_file(
 	sf_id varchar(100) PRIMARY KEY,
-	sf_name varchar(255),
+	sf_name varchar(255) NOT NULL UNIQUE,
 	sf_extension varchar(5),
 	sf_product_name varchar(100),
 	sf_project_name varchar(100),
 	sf_created_date DATE
 );
-
 
 CREATE TABLE structure_file_detail(
 sfd_id varchar(100) PRIMARY KEY,
@@ -19,4 +18,19 @@ sfd_data_mandatory varchar(2),
 sfd_data_length int,
 sfd_sample text,
 sfd_description text
+);
+
+CREATE TABLE template(
+t_id varchar(100) PRIMARY KEY,
+t_name varchar(100) NOT NULL UNIQUE,
+t_created_date DATE
+);
+
+CREATE TABLE template_detail(
+td_id varchar(100) PRIMARY KEY,
+t_id varchar(100),
+td_data_type varchar(100),
+td_data_sequence_no int,
+td_field_name varchar(255),
+td_field_value varchar(255)
 );

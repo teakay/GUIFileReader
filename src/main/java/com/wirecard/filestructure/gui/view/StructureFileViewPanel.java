@@ -30,11 +30,11 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
         this.controller = controller;
         structureTableModel = new StructureTableModel();
 
-        initComponentNew();
+        initComponent();
         localInitialization();
     }
 
-    public void initComponentNew(){
+    public void initComponent(){
         JLabel titleLabel = new JLabel("File Structure");
         titleLabel.setFont(new Font("Arial",Font.BOLD,18));
         titleLabel.setBackground(Color.GRAY);
@@ -66,6 +66,7 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
 
         GroupLayout layout = new GroupLayout(this);
         setLayout(layout);
+
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
         layout.setHorizontalGroup(layout.createSequentialGroup()

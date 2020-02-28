@@ -19,17 +19,19 @@ public class MainController implements ListSelectionListener {
 
             if (Constants.MENU[0].equals(selectedMenu)) {
                 StructureFileController controller = new StructureFileController();
-                StructureFileViewPanel view = new StructureFileViewPanel(controller);
+                StructureFileViewPanel view = new StructureFileViewPanel(new StructureFileController());
                 controller.addView(view);
                 mainFrame.setContentPanel(view);
             } else if (Constants.MENU[1].equals(selectedMenu)) {
-                TemplateView templateView = new TemplateView();
+                TemplateView templateView = new TemplateView(new TemplateController());
                 mainFrame.setContentScrollPane(templateView);
             } else if (Constants.MENU[2].equals(selectedMenu)) {
-                ParserView parserView = new ParserView();
+                ParserController controller =  new ParserController();
+                ParserView parserView = new ParserView(controller);
+                controller.addView(parserView);
                 mainFrame.setContentScrollPane(parserView);
             } else if (Constants.MENU[3].equals(selectedMenu)) {
-                FileCreatorView fileCreatorView = new FileCreatorView();
+                FileCreatorView fileCreatorView = new FileCreatorView(new AbstractController());
                 mainFrame.setContentScrollPane(fileCreatorView);
             } else {
                 JLabel label = new JLabel();

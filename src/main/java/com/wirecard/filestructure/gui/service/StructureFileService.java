@@ -16,8 +16,9 @@ public class StructureFileService {
     private static String QUERY_GET_ALL_STRUCTURE_FILE_LIST = "from StructureFile s order by s.createdDate";
     private static String QUERY_DELETE_ROW_BY_ID = "delete from StructureFile s where s.id = :id";
     private static String QUERY_DELETE_DETAIL_ROW_BY_ID = "delete from StructureFileDetail sd where sd.structureFile.id = :headerId";
-    private static String QUERY_GET_DETAIL_BY_ID = "from StructureFileDetail sd where sd.structureFile.id = :id";
+    private static String QUERY_GET_DETAIL_BY_PARENT_ID = "from StructureFileDetail sd where sd.structureFile.id = :id order by sd.dataType, sd.sequenceNo";
     private static String QUERY_GET_STRUCTURE_FILE_BY_ID = "from StructureFile s where s.id = :id";
+    private static String QUERY_GET_STRUCTURE_FILE_BY_NAME = "from StructureFile s where s.structureName = :structureName";
 
     public static List getStructureFileList() throws Exception {
         List<Object[]> returnList = new ArrayList<Object[]>();
@@ -49,6 +50,48 @@ public class StructureFileService {
         }
         return returnList;
 
+    }
+
+    public static List<StructureFile> getStructureFileListModel() throws Exception {
+        List<StructureFile> resultList = new ArrayList<StructureFile>();
+
+        try {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+
+            Query q = session.createQuery(QUERY_GET_ALL_STRUCTURE_FILE_LIST);
+            resultList = q.list();
+
+
+            session.getTransaction().commit();
+            session.close();
+        }catch (Exception e){
+            throw e;
+        }
+        return resultList;
+
+    }
+
+    public static List getStructureFileAndDetailByStructureName(String structureName) throws Exception {
+        List returnList = new ArrayList();
+        try{
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+
+            Query q = session.createQuery(QUERY_GET_STRUCTURE_FILE_BY_NAME);
+            q.setString("structureName", structureName);
+            StructureFile structureFile = (StructureFile)q.uniqueResult();
+
+            Query q2 = session.createQuery(QUERY_GET_DETAIL_BY_PARENT_ID);
+            q2.setString("id", structureFile.getId());
+            returnList = q2.list();
+
+            session.getTransaction().commit();
+            session.close();
+        }catch (Exception e){
+            throw e;
+        }
+        return returnList;
     }
 
     public static void deleteById(List<Object[]> data) throws Exception {
@@ -136,7 +179,7 @@ public class StructureFileService {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
 
-        Query q = session.createQuery(QUERY_GET_DETAIL_BY_ID);
+        Query q = session.createQuery(QUERY_GET_DETAIL_BY_PARENT_ID);
         q.setString("id",id);
 
         List result =  q.list();

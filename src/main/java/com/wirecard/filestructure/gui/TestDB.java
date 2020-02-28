@@ -38,12 +38,17 @@ public class TestDB {
         trx = session.beginTransaction();
 
         StructureFile sf = new StructureFile("PAY file","txt",new Date());
-        StructureFile sf2 = new StructureFile("CTL file","txt",new Date());
         session.save(sf);
+
+        session.flush();
+        trx.commit();
+
+        StructureFile sf2 = new StructureFile("PAY file","txt",new Date());
         session.save(sf2);
 
         session.flush();
         trx.commit();
+
         session.close();
 
 //        Query q = session.createQuery("from StructureFile s order by s.createdDate");

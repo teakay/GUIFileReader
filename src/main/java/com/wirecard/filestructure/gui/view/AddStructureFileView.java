@@ -4,11 +4,9 @@ import com.wirecard.filestructure.gui.controller.StructureFileController;
 import com.wirecard.filestructure.gui.model.InstructionFileTableModel;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
