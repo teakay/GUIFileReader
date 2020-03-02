@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class AddStructureFileView extends AbstractViewPanel {
 
@@ -212,85 +213,83 @@ public class AddStructureFileView extends AbstractViewPanel {
         addButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                headerTableModel.addRow(new Object[]{null,headerTableModel.getRowCount()+1,null,null,null,null,null,null,false});
+                Vector vector = new Vector();
+                vector.add(null);
+                vector.add(headerTable.getRowCount()+1);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                headerTableModel.addRow(vector);
             }
         });
         deleteButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List selectedData = new ArrayList();
-
-                for(int row = 0; row < headerTable.getRowCount(); row++){
-                    Boolean checked = (Boolean) headerTable.getValueAt(row,7);
-                    if(checked){
-                        Object[] data = headerTableModel.getRowData(row);
-                        selectedData.add(data);
-                    }
-                }
-                if(selectedData.isEmpty()){
-                    headerTableModel.deleteRow();
-                }else {
-                    headerTableModel.deleteRow(selectedData);
-                }
+                headerTableModel.removeRow(headerTable.getSelectedRows());
             }
         });
 
         addButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                detailTableModel.addRow(new Object[]{null,detailTableModel.getRowCount()+1,null,null,null,null,null,null,false});
+                Vector vector = new Vector();
+                vector.add(null);
+                vector.add(detailTable.getRowCount()+1);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                detailTableModel.addRow(vector);
             }
         });
 
         deleteButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List selectedData = new ArrayList();
-
-                for(int row = 0; row < detailTable.getRowCount(); row++){
-                    Boolean checked = (Boolean) detailTable.getValueAt(row,7);
-                    if(checked){
-                        Object[] data = detailTableModel.getRowData(row);
-                        selectedData.add(data);
-                    }
-                }
-                if(selectedData.isEmpty()){
-                    detailTableModel.deleteRow();
-                }else {
-                    detailTableModel.deleteRow(selectedData);
-                }
+                detailTableModel.removeRow(detailTable.getSelectedRows());
             }
         });
 
         addButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                footerTableModel.addRow(new Object[]{null,footerTableModel.getRowCount()+1,null,null,null,null,null,null,false});
+                Vector vector = new Vector();
+                vector.add(null);
+                vector.add(footerTable.getRowCount()+1);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                footerTableModel.addRow(vector);
             }
         });
         deleteButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List selectedData = new ArrayList();
-
-                for(int row = 0; row < footerTable.getRowCount(); row++){
-                    Boolean checked = (Boolean) footerTable.getValueAt(row,7);
-                    if(checked){
-                        Object[] data = footerTableModel.getRowData(row);
-                        selectedData.add(data);
-                    }
-                }
-                if(selectedData.isEmpty()){
-                    footerTableModel.deleteRow();
-                }else {
-                    footerTableModel.deleteRow(selectedData);
-                }
+                footerTableModel.removeRow(footerTable.getSelectedRows());
             }
         });
 
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(headerTable.isEditing()){
+                    headerTable.getCellEditor().stopCellEditing();
+                }
+                if(detailTable.isEditing()){
+                    detailTable.getCellEditor().stopCellEditing();
+                }
+                if(footerTable.isEditing()){
+                    footerTable.getCellEditor().stopCellEditing();
+                }
+
                 controller.doSaveData(getContainer(), nameTextField.getText(), (String)fileExtensionList.getSelectedItem(),
                         productTextField.getText(), projectTextField.getText(),
                         headerTableModel.getAllData(), detailTableModel.getAllData(), footerTableModel.getAllData());

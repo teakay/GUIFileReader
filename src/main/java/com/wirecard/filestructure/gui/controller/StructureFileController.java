@@ -96,11 +96,11 @@ public class StructureFileController extends AbstractController {
         for(int i = 0; i < detailList.size(); i++){
             StructureFileDetail sfd = (StructureFileDetail)detailList.get(i);
             if("header".equals(sfd.getDetailType())){
-                headerTableList.add(sfd.getArrayObject());
+                headerTableList.add(sfd.getVectorData());
             }else if("detail".equals(sfd.getDetailType())){
-                detailTableList.add(sfd.getArrayObject());
+                detailTableList.add(sfd.getVectorData());
             }else if("footer".equals(sfd.getDetailType())){
-                footerTableList.add(sfd.getArrayObject());
+                footerTableList.add(sfd.getVectorData());
             }
         }
         map.put("header",headerTableList);

@@ -5,10 +5,11 @@ import com.wirecard.filestructure.gui.utils.Constants;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class InstructionFileTableModel extends AbstractTableModel {
     private String[] columnNames  = Constants.INSTRUCTION_FILE_TABLE_COLUMN;
-    private List<Object[]> data = new ArrayList<Object[]>();
+    private List<Vector> data = new ArrayList<Vector>();
 
     public InstructionFileTableModel(){
     }
@@ -25,7 +26,7 @@ public class InstructionFileTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return data.get(rowIndex)[columnIndex];
+        return data.get(rowIndex).get(columnIndex);
     }
 
     public String getColumnName(int col){
@@ -49,15 +50,12 @@ public class InstructionFileTableModel extends AbstractTableModel {
             return String.class;
         }else if(col == 7){
             return String.class;
-        }else if(col == 8){
-            return Boolean.class;
-        }
-        else{
+        }else{
             return String.class;
         }
     }
 
-    public void addRow(Object[] dataRow){
+    public void addRow(Vector dataRow){
         data.add(dataRow);
        fireTableDataChanged();
     }
@@ -77,7 +75,16 @@ public class InstructionFileTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    public Object[] getRowData(int row){
+    public void removeRow(int[] row){
+        List selectedList = new ArrayList();
+        for(int i = 0; i < row.length; i++){
+            selectedList.add(data.get(row[i]));
+        }
+        data.removeAll(selectedList);
+        fireTableDataChanged();
+    }
+
+    public Vector getRowData(int row){
         return data.get(row);
     }
 
@@ -93,11 +100,11 @@ public class InstructionFileTableModel extends AbstractTableModel {
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        data.get(rowIndex)[columnIndex] = aValue;
+        data.get(rowIndex).set(columnIndex,aValue);
         fireTableDataChanged();
     }
 
-    public List<Object[]> getAllData(){
+    public List<Vector> getAllData(){
         return this.data;
     }
 

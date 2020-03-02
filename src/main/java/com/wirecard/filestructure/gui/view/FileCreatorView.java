@@ -6,6 +6,8 @@ import com.wirecard.filestructure.gui.entity.StructureFile;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,8 +67,16 @@ public class FileCreatorView extends AbstractViewPanel {
         headerLabel.setOpaque(true);
         headerLabel.setBackground(Color.LIGHT_GRAY);
 
-        headerTable = new JTable();
-        headerTable.setFillsViewportHeight(true);
+        headerTable = new JTable(){
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component component = super.prepareRenderer(renderer, row, column);
+                int rendererWidth = component.getPreferredSize().width;
+                TableColumn tableColumn = getColumnModel().getColumn(column);
+                tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
+                return component;
+            }
+        };
         JScrollPane headerScrollPane = new JScrollPane(headerTable);
 
         JLabel detailLabel = new JLabel();
@@ -74,8 +84,18 @@ public class FileCreatorView extends AbstractViewPanel {
         detailLabel.setOpaque(true);
         detailLabel.setBackground(Color.LIGHT_GRAY);
 
-        detailTable = new JTable();
-        detailTable.setFillsViewportHeight(true);
+        detailTable = new JTable(){
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component component = super.prepareRenderer(renderer, row, column);
+                int rendererWidth = component.getPreferredSize().width;
+                TableColumn tableColumn = getColumnModel().getColumn(column);
+                tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
+                return component;
+            }
+        };
+        detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        detailTable.setPreferredScrollableViewportSize( new Dimension( 450, 160 ) );
         JScrollPane detailScrollPane = new JScrollPane(detailTable);
 
         addButton = new JButton();
@@ -89,8 +109,16 @@ public class FileCreatorView extends AbstractViewPanel {
         footerLabel.setOpaque(true);
         footerLabel.setBackground(Color.LIGHT_GRAY);
 
-        footerTable = new JTable();
-        footerTable.setFillsViewportHeight(true);
+        footerTable = new JTable(){
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component component = super.prepareRenderer(renderer, row, column);
+                int rendererWidth = component.getPreferredSize().width;
+                TableColumn tableColumn = getColumnModel().getColumn(column);
+                tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
+                return component;
+            }
+        };
         JScrollPane footerScrollPane = new JScrollPane(footerTable);
 
         saveFileButton = new JButton();
@@ -223,6 +251,15 @@ public class FileCreatorView extends AbstractViewPanel {
         saveFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(headerTable.isEditing()){
+                    headerTable.getCellEditor().stopCellEditing();
+                }
+                if(detailTable.isEditing()){
+                    detailTable.getCellEditor().stopCellEditing();
+                }
+                if(footerTable.isEditing()){
+                    footerTable.getCellEditor().stopCellEditing();
+                }
                 controller.saveAsFile();
             }
         });

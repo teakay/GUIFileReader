@@ -4,6 +4,8 @@ import com.wirecard.filestructure.gui.controller.StructureFileController;
 import com.wirecard.filestructure.gui.model.InstructionFileTableModel;
 
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +13,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 public class DetailStructureFileView extends  AbstractViewPanel  {
 
@@ -76,8 +79,17 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
         JLabel headerLabel = new JLabel("Header");
         headerLabel.setBackground(Color.LIGHT_GRAY);
         headerLabel.setOpaque(true);
-        headerTable = new JTable(headerTableModel);
-        headerTable.setFillsViewportHeight(true);
+
+        headerTable = new JTable(headerTableModel){
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component component = super.prepareRenderer(renderer, row, column);
+                int rendererWidth = component.getPreferredSize().width;
+                TableColumn tableColumn = getColumnModel().getColumn(column);
+                tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
+                return component;
+            }
+        };
         headerTable.setPreferredScrollableViewportSize( new Dimension( 450, 160 ) );
         JScrollPane scrollPane = new JScrollPane(headerTable);
         addButton1 = new JButton();
@@ -88,8 +100,17 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
         JLabel detailLabel = new JLabel("Detail");
         detailLabel.setBackground(Color.LIGHT_GRAY);
         detailLabel.setOpaque(true);
-        detailTable = new JTable(detailTableModel);
-        detailTable.setFillsViewportHeight(true);
+
+        detailTable = new JTable(detailTableModel){
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component component = super.prepareRenderer(renderer, row, column);
+                int rendererWidth = component.getPreferredSize().width;
+                TableColumn tableColumn = getColumnModel().getColumn(column);
+                tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
+                return component;
+            }
+        };
         detailTable.setPreferredScrollableViewportSize( new Dimension( 450, 160 ) );
         JScrollPane scrollPaneDetail = new JScrollPane(detailTable);
         addButton2 = new JButton();
@@ -100,8 +121,17 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
         JLabel footerLabel = new JLabel("Footer");
         footerLabel.setBackground(Color.LIGHT_GRAY);
         footerLabel.setOpaque(true);
-        footerTable = new JTable(footerTableModel);
-        footerTable.setFillsViewportHeight(true);
+
+        footerTable = new JTable(footerTableModel){
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component component = super.prepareRenderer(renderer, row, column);
+                int rendererWidth = component.getPreferredSize().width;
+                TableColumn tableColumn = getColumnModel().getColumn(column);
+                tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
+                return component;
+            }
+        };
         footerTable.setPreferredScrollableViewportSize( new Dimension( 450, 160 ) );
         JScrollPane scrollPaneFooter = new JScrollPane(footerTable);
         addButton3 = new JButton();
@@ -222,85 +252,83 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
         addButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                headerTableModel.addRow(new Object[]{null,headerTableModel.getRowCount()+1,null,null,null,null,null,null,false});
+                Vector vector = new Vector();
+                vector.add(null);
+                vector.add(headerTable.getRowCount()+1);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+
+                headerTableModel.addRow(vector);
             }
         });
         deleteButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List selectedData = new ArrayList();
-
-                for(int row = 0; row < headerTable.getRowCount(); row++){
-                    Boolean checked = (Boolean) headerTable.getValueAt(row,7);
-                    if(checked){
-                        Object[] data = headerTableModel.getRowData(row);
-                        selectedData.add(data);
-                    }
-                }
-                if(selectedData.isEmpty()){
-                    headerTableModel.deleteRow();
-                }else {
-                    headerTableModel.deleteRow(selectedData);
-                }
+                headerTableModel.removeRow(headerTable.getSelectedRows());
             }
         });
 
         addButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                detailTableModel.addRow(new Object[]{null,detailTableModel.getRowCount()+1,null,null,null,null,null,null,false});
+                Vector vector = new Vector();
+                vector.add(null);
+                vector.add(detailTable.getRowCount()+1);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                detailTableModel.addRow(vector);
             }
         });
 
         deleteButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List selectedData = new ArrayList();
-
-                for(int row = 0; row < detailTable.getRowCount(); row++){
-                    Boolean checked = (Boolean) detailTable.getValueAt(row,7);
-                    if(checked){
-                        Object[] data = detailTableModel.getRowData(row);
-                        selectedData.add(data);
-                    }
-                }
-                if(selectedData.isEmpty()){
-                    detailTableModel.deleteRow();
-                }else {
-                    detailTableModel.deleteRow(selectedData);
-                }
+                detailTableModel.removeRow(detailTable.getSelectedRows());
             }
         });
 
         addButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                footerTableModel.addRow(new Object[]{null,footerTableModel.getRowCount()+1,null,null,null,null,null,null,false});
+                Vector vector = new Vector();
+                vector.add(null);
+                vector.add(footerTable.getRowCount()+1);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                vector.add(null);
+                footerTableModel.addRow(vector);
             }
         });
         deleteButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List selectedData = new ArrayList();
-
-                for(int row = 0; row < footerTable.getRowCount(); row++){
-                    Boolean checked = (Boolean) footerTable.getValueAt(row,7);
-                    if(checked){
-                        Object[] data = footerTableModel.getRowData(row);
-                        selectedData.add(data);
-                    }
-                }
-                if(selectedData.isEmpty()){
-                    footerTableModel.deleteRow();
-                }else {
-                    footerTableModel.deleteRow(selectedData);
-                }
+                footerTableModel.removeRow(footerTable.getSelectedRows());
             }
         });
 
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(headerTable.isEditing()){
+                    headerTable.getCellEditor().stopCellEditing();
+                }
+                if(detailTable.isEditing()){
+                    detailTable.getCellEditor().stopCellEditing();
+                }
+                if(footerTable.isEditing()){
+                    footerTable.getCellEditor().stopCellEditing();
+                }
                 controller.doUpdate(getContainer(),headerId.getText(),
                         nameTextField.getText(), productTextField.getText(), projectTextField.getText(),
                         headerTableModel.getAllData(),detailTableModel.getAllData(), footerTableModel.getAllData());

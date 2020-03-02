@@ -6,12 +6,15 @@ import com.wirecard.filestructure.gui.entity.StructureFile;
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 public class ParserView extends AbstractViewPanel {
 
@@ -70,8 +73,18 @@ public class ParserView extends AbstractViewPanel {
         detailLabel.setOpaque(true);
         detailLabel.setBackground(Color.LIGHT_GRAY);
 
-        detailTable = new JTable();
-        detailTable.setFillsViewportHeight(true);
+        detailTable = new JTable(){
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component component = super.prepareRenderer(renderer, row, column);
+                int rendererWidth = component.getPreferredSize().width;
+                TableColumn tableColumn = getColumnModel().getColumn(column);
+                tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
+                return component;
+            }
+        };
+        detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
         JScrollPane detailScrollPane = new JScrollPane(detailTable);
 
         addButton  = new JButton();
@@ -190,19 +203,24 @@ public class ParserView extends AbstractViewPanel {
             public void actionPerformed(ActionEvent e) {
                 String structureName = (String)structureList.getSelectedItem();
                 Map columnMap = controller.getColumnFromStructure(structureName);
-//                controller.parseFile();
+                Map parseMap = controller.parseFile(fileNameTextField.getText(),columnMap);
 
                 DefaultTableModel headerModel = new DefaultTableModel();
                 List headerList = (List)columnMap.get("header");
                 for(int i = 0; i < headerList.size(); i++) {
                     headerModel.addColumn(headerList.get(i));
                 }
+                headerModel.addRow((Vector)parseMap.get("header"));
                 headerTable.setModel(headerModel);
 
                 DefaultTableModel detailModel = new DefaultTableModel();
                 List detailList = (List)columnMap.get("detail");
                 for(int i = 0; i < detailList.size(); i++) {
                     detailModel.addColumn(detailList.get(i));
+                }
+                List detailDataList = (List) parseMap.get("detail");
+                for (int n = 0; n < detailDataList.size(); n++){
+                    detailModel.addRow((Vector)detailDataList.get(n));
                 }
                 detailTable.setModel(detailModel);
 
@@ -211,6 +229,7 @@ public class ParserView extends AbstractViewPanel {
                 for(int i = 0; i < footerList.size(); i++) {
                     footerModel.addColumn(footerList.get(i));
                 }
+                footerModel.addRow((Vector)parseMap.get("footer"));
                 footerTable.setModel(footerModel);
             }
         });

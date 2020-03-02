@@ -29,20 +29,32 @@ public class DefaultTableController extends AbstractController {
             List detailList = new ArrayList();
             List footerList = new ArrayList();
 
+            List headerLengthList = new ArrayList();
+            List detailLengthList = new ArrayList();
+            List footerLengthList = new ArrayList();
+
             for(int i = 0; i < structureDetailList.size(); i++){
                 StructureFileDetail sfd = (StructureFileDetail)structureDetailList.get(i);
                 if("header".equals(sfd.getDetailType())){
                     headerList.add(sfd.getSequenceNo()-1,sfd.getFieldName());
+                    headerLengthList.add(sfd.getSequenceNo()-1,sfd.getDataLength());
                 }else if("detail".equals(sfd.getDetailType())){
                     detailList.add(sfd.getSequenceNo()-1, sfd.getFieldName());
+                    detailLengthList.add(sfd.getSequenceNo()-1,sfd.getDataLength());
                 }else if("footer".equals(sfd.getDetailType())){
                     footerList.add(sfd.getSequenceNo()-1, sfd.getFieldName());
+                    footerLengthList.add(sfd.getSequenceNo()-1,sfd.getDataLength());
                 }
             }
 
             resultMap.put("header",headerList);
             resultMap.put("detail",detailList);
             resultMap.put("footer",footerList);
+
+            resultMap.put("headerLength",headerLengthList);
+            resultMap.put("detailLenght",detailLengthList);
+            resultMap.put("footerLength",footerLengthList);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

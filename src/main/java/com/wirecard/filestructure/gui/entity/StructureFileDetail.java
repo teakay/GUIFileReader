@@ -3,6 +3,7 @@ package com.wirecard.filestructure.gui.entity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Vector;
 
 @Entity
 @Table(name = "structure_file_detail")
@@ -167,6 +168,19 @@ public class StructureFileDetail {
         this.description = description;
     }
 
+    public Vector getVectorData(){
+       Vector vector =  new Vector();
+       vector.add(0,getId());
+       vector.add(1,getSequenceNo());
+       vector.add(2,getFieldName());
+       vector.add(3,getMandatory());
+       vector.add(4,getDataType());
+       vector.add(5,getDataLength());
+       vector.add(6,getSampleValue());
+       vector.add(7,getDescription());
+
+       return  vector;
+    }
     public Object[] getArrayObject(){
         Object[] obj = new Object[9];
         obj[0] = getId();

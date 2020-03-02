@@ -13,7 +13,7 @@ public class StructureFileService {
     private static String QUERY_GET_ALL_STRUCTURE_FILE_LIST = "from StructureFile s order by s.createdDate";
     private static String QUERY_DELETE_ROW_BY_ID = "delete from StructureFile s where s.id = :id";
     private static String QUERY_DELETE_DETAIL_ROW_BY_ID = "delete from StructureFileDetail sd where sd.structureFile.id = :headerId";
-    private static String QUERY_GET_DETAIL_BY_PARENT_ID = "from StructureFileDetail sd where sd.structureFile.id = :id order by sd.dataType, sd.sequenceNo";
+    private static String QUERY_GET_DETAIL_BY_PARENT_ID = "from StructureFileDetail sd where sd.structureFile.id = :id order by sd.detailType, sd.sequenceNo";
     private static String QUERY_GET_STRUCTURE_FILE_BY_ID = "from StructureFile s where s.id = :id";
     private static String QUERY_GET_STRUCTURE_FILE_BY_NAME = "from StructureFile s where s.structureName = :structureName";
 
@@ -122,9 +122,9 @@ public class StructureFileService {
 
             StructureFile structureFile = new StructureFile(structureName, extension,  productName, projectName, new Date());
 
-            List<Object[]> headerData = (List<Object[]>) dataMap.get("headerData");
-            List<Object[]> detailData = (List<Object[]>) dataMap.get("detailData");
-            List<Object[]> footerData = (List<Object[]>) dataMap.get("footerData");
+            List<Vector> headerData = (List<Vector>) dataMap.get("headerData");
+            List<Vector> detailData = (List<Vector>) dataMap.get("detailData");
+            List<Vector> footerData = (List<Vector>) dataMap.get("footerData");
 
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
@@ -134,9 +134,10 @@ public class StructureFileService {
             session.clear();
 
             for (int i = 0; i < headerData.size(); i++) {
-                StructureFileDetail sfd = new StructureFileDetail(structureFile, "header", (Integer) headerData.get(i)[1], (String) headerData.get(i)[2],
-                        (String) headerData.get(i)[3], (String) headerData.get(i)[4], (Integer) headerData.get(i)[5],
-                        (String) headerData.get(i)[6],(String) headerData.get(i)[7]);
+                StructureFileDetail sfd = new StructureFileDetail(structureFile, "header",
+                        (Integer) headerData.get(i).get(1), (String) headerData.get(i).get(2),
+                        (String) headerData.get(i).get(3), (String) headerData.get(i).get(4), (Integer) headerData.get(i).get(5),
+                        (String) headerData.get(i).get(6),(String) headerData.get(i).get(7));
                 session.save(sfd);
                 if (i % 10 == 0) {
                     session.flush();
@@ -144,9 +145,10 @@ public class StructureFileService {
                 }
             }
             for (int i = 0; i < detailData.size(); i++) {
-                StructureFileDetail sfd = new StructureFileDetail(structureFile, "detail", (Integer) detailData.get(i)[1], (String) detailData.get(i)[2],
-                        (String) detailData.get(i)[3], (String) detailData.get(i)[4], (Integer) detailData.get(i)[5],
-                        (String) detailData.get(i)[6],(String) detailData.get(i)[7]);
+                StructureFileDetail sfd = new StructureFileDetail(structureFile, "detail",
+                        (Integer) detailData.get(i).get(1), (String) detailData.get(i).get(2),
+                        (String) detailData.get(i).get(3), (String) detailData.get(i).get(4), (Integer) detailData.get(i).get(5),
+                        (String) detailData.get(i).get(6),(String) detailData.get(i).get(7));
                 session.save(sfd);
                 if (i % 10 == 0) {
                     session.flush();
@@ -154,9 +156,10 @@ public class StructureFileService {
                 }
             }
             for (int i = 0; i < footerData.size(); i++) {
-                StructureFileDetail sfd = new StructureFileDetail(structureFile, "footer", (Integer) footerData.get(i)[1], (String) footerData.get(i)[2],
-                        (String) footerData.get(i)[3], (String) footerData.get(i)[4], (Integer) footerData.get(i)[5],
-                        (String) footerData.get(i)[6],(String) footerData.get(i)[7]);
+                StructureFileDetail sfd = new StructureFileDetail(structureFile, "footer",
+                        (Integer) footerData.get(i).get(1), (String) footerData.get(i).get(2),
+                        (String) footerData.get(i).get(3), (String) footerData.get(i).get(4), (Integer) footerData.get(i).get(5),
+                        (String) footerData.get(i).get(6),(String) footerData.get(i).get(7));
                 session.save(sfd);
                 if (i % 10 == 0) {
                     session.flush();
@@ -204,15 +207,15 @@ public class StructureFileService {
 
             session.saveOrUpdate(structureFile);
 
-            List<Object[]> headerData = (List<Object[]>) dataMap.get("headerData");
-            List<Object[]> detailData = (List<Object[]>) dataMap.get("detailData");
-            List<Object[]> footerData = (List<Object[]>) dataMap.get("footerData");
+            List<Vector> headerData = (List<Vector>) dataMap.get("headerData");
+            List<Vector> detailData = (List<Vector>) dataMap.get("detailData");
+            List<Vector> footerData = (List<Vector>) dataMap.get("footerData");
 
             for (int i = 0; i < headerData.size(); i++) {
-                StructureFileDetail sfd = new StructureFileDetail((String)headerData.get(i)[0],structureFile,
-                        "header", (Integer) headerData.get(i)[1], (String) headerData.get(i)[2],
-                        (String) headerData.get(i)[3], (String) headerData.get(i)[4], (Integer) headerData.get(i)[5],
-                        (String) headerData.get(i)[6], (String) headerData.get(i)[7]);
+                StructureFileDetail sfd = new StructureFileDetail((String)headerData.get(i).get(0),structureFile,
+                        "header", (Integer) headerData.get(i).get(1), (String) headerData.get(i).get(2),
+                        (String) headerData.get(i).get(3), (String) headerData.get(i).get(4), (Integer) headerData.get(i).get(5),
+                        (String) headerData.get(i).get(6), (String) headerData.get(i).get(7));
                 session.saveOrUpdate(sfd);
                 if (i % 10 == 0) {
                     session.flush();
@@ -220,9 +223,10 @@ public class StructureFileService {
                 }
             }
             for (int i = 0; i < detailData.size(); i++) {
-                StructureFileDetail sfd = new StructureFileDetail((String)detailData.get(i)[0],structureFile, "detail", (Integer) detailData.get(i)[1], (String) detailData.get(i)[2],
-                        (String) detailData.get(i)[3], (String) detailData.get(i)[4], (Integer) detailData.get(i)[5],
-                        (String) detailData.get(i)[6],(String) detailData.get(i)[7]);
+                StructureFileDetail sfd = new StructureFileDetail((String)detailData.get(i).get(0),structureFile, "detail",
+                        (Integer) detailData.get(i).get(1), (String) detailData.get(i).get(2),
+                        (String) detailData.get(i).get(3), (String) detailData.get(i).get(4), (Integer) detailData.get(i).get(5),
+                        (String) detailData.get(i).get(6),(String) detailData.get(i).get(7));
                 session.saveOrUpdate(sfd);
                 if (i % 10 == 0) {
                     session.flush();
@@ -230,9 +234,10 @@ public class StructureFileService {
                 }
             }
             for (int i = 0; i < footerData.size(); i++) {
-                StructureFileDetail sfd = new StructureFileDetail((String)footerData.get(i)[0],structureFile, "footer", (Integer) footerData.get(i)[1], (String) footerData.get(i)[2],
-                        (String) footerData.get(i)[3], (String) footerData.get(i)[4], (Integer) footerData.get(i)[5],
-                        (String) footerData.get(i)[6], (String) footerData.get(i)[7]);
+                StructureFileDetail sfd = new StructureFileDetail((String)footerData.get(i).get(0),structureFile, "footer",
+                        (Integer) footerData.get(i).get(1), (String) footerData.get(i).get(2),
+                        (String) footerData.get(i).get(3), (String) footerData.get(i).get(4), (Integer) footerData.get(i).get(5),
+                        (String) footerData.get(i).get(6), (String) footerData.get(i).get(7));
                 session.saveOrUpdate(sfd);
                 if (i % 10 == 0) {
                     session.flush();
