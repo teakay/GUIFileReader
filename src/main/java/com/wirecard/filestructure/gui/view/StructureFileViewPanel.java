@@ -47,7 +47,7 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
         searchButton = new JButton();
         searchButton.setText("Search");
 
-        JLabel tableLabel = new JLabel("File Structure Listing");
+        JLabel tableLabel = new JLabel("File Structure List");
         tableLabel.setBackground(Color.LIGHT_GRAY);
         tableLabel.setOpaque(true);
 
@@ -132,18 +132,9 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List selectedData = new ArrayList();
-
-                for(int row = 0; row < structureFileTable.getRowCount(); row++){
-                    Boolean checked = (Boolean) structureFileTable.getValueAt(row,5);
-                    if(checked){
-                        Object[] data = structureTableModel.getRowData(row);
-                       selectedData.add(data);
-                    }
-                }
-
-                controller.doDelete(selectedData);
-                structureTableModel.deleteRow(selectedData);
+                List selectedRows = structureTableModel.getElements(structureFileTable.getSelectedRows());
+                controller.doDelete(selectedRows);
+                structureTableModel.deleteRow(selectedRows);
             }
         });
         structureFileTable.addMouseListener(new MouseAdapter() {

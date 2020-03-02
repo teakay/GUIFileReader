@@ -5,10 +5,11 @@ import com.wirecard.filestructure.gui.utils.Constants;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class StructureTableModel extends AbstractTableModel {
     private String[] columnNames  = Constants.FILE_STRUCTURE_TABLE_COLUMN;
-    private List<Object[]> data = new ArrayList<Object[]>();
+    private List<Vector> data = new ArrayList<Vector>();
 
 
     @Override
@@ -23,7 +24,7 @@ public class StructureTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return data.get(rowIndex)[columnIndex];
+        return data.get(rowIndex).get(columnIndex);
     }
 
     public String getColumnName(int col){
@@ -56,20 +57,18 @@ public class StructureTableModel extends AbstractTableModel {
        else if(col == 5){
            return String.class;
        }
-       else if(col == 6){
-           return Boolean.class;
-       }else{
+       else{
            return String.class;
        }
     }
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        data.get(rowIndex)[columnIndex] = aValue;
+        data.get(rowIndex).set(columnIndex, aValue);
         fireTableDataChanged();
     }
 
-    public void addRow(Object[] dataRow){
+    public void addRow(Vector dataRow){
         data.add(dataRow);
         fireTableDataChanged();
     }
@@ -87,12 +86,22 @@ public class StructureTableModel extends AbstractTableModel {
         data.removeAll(dataRow);
         fireTableDataChanged();
     }
-
+    public void deleteRow(int index){
+        data.remove(index);
+        fireTableDataChanged();
+    }
     public void deleteRow(){
         data.remove(getRowCount() - 1);
         fireTableDataChanged();
     }
-    public Object[] getRowData(int row){
+    public Vector getRowData(int row){
         return data.get(row);
+    }
+    public List getElements(int[] index){
+        List<Vector> selectedRows = new ArrayList<Vector>();
+        for(int i = 0; i < index.length; i++) {
+            selectedRows.add(data.get(index[i]));
+        }
+        return selectedRows;
     }
 }

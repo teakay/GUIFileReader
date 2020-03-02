@@ -6,10 +6,7 @@ import com.wirecard.filestructure.gui.utils.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StructureFileService {
 
@@ -21,7 +18,7 @@ public class StructureFileService {
     private static String QUERY_GET_STRUCTURE_FILE_BY_NAME = "from StructureFile s where s.structureName = :structureName";
 
     public static List getStructureFileList() throws Exception {
-        List<Object[]> returnList = new ArrayList<Object[]>();
+        List<Vector> returnList = new ArrayList<Vector>();
 
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
@@ -32,16 +29,15 @@ public class StructureFileService {
 
             for (int i = 0; i < resultList.size(); i++) {
                 StructureFile structureFile = (StructureFile) resultList.get(i);
-                Object[] dataList = new Object[7];
-                dataList[0] = structureFile.getId();
-                dataList[1] = structureFile.getStructureName();
-                dataList[2] = structureFile.getExtension();
-                dataList[3] = structureFile.getProductName();
-                dataList[4] = structureFile.getProjectName();
-                dataList[5] = structureFile.getCreatedDate();
-                dataList[6] = new Boolean(false);
+                Vector dataVector = new Vector();
+                dataVector.add(0,structureFile.getId());
+                dataVector.add(1,structureFile.getStructureName());
+                dataVector.add(2, structureFile.getExtension());
+                dataVector.add(3, structureFile.getProductName());
+                dataVector.add(4, structureFile.getProjectName());
+                dataVector.add(5, structureFile.getCreatedDate());
 
-                returnList.add(dataList);
+                returnList.add(dataVector);
             }
             session.getTransaction().commit();
             session.close();
@@ -94,10 +90,10 @@ public class StructureFileService {
         return returnList;
     }
 
-    public static void deleteById(List<Object[]> data) throws Exception {
+    public static void deleteById(List<Vector> data) throws Exception {
         try {
             for(int i = 0; i < data.size(); i++) {
-                String id = (String)data.get(i)[0];
+                String id = (String)data.get(i).get(0);
                 Session session = HibernateUtil.getSessionFactory().openSession();
                 session.beginTransaction();
 

@@ -14,10 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ParserView extends AbstractViewPanel {
-    // top : - pilihan structure mana
-    //       - pilihan file yg mau diparsing
-    // down : - generate table sesuai structure yg di pilih
-    //        - button save as template dan save in your directory
 
     private JLabel titleLabel;
     private JComboBox structureList;
@@ -30,7 +26,6 @@ public class ParserView extends AbstractViewPanel {
     private JButton deleteButton;
     private JTable footerTable;
     private JButton saveAsTemplateButton;
-    private JButton backButton;
     private JButton saveFileButton;
     private ParserController controller;
     private File selectedFile;
@@ -49,11 +44,11 @@ public class ParserView extends AbstractViewPanel {
         titleLabel.setBackground(Color.GRAY);
 
         JLabel chooseStructureLabel = new JLabel();
-        chooseStructureLabel.setText("Choose Structure");
+        chooseStructureLabel.setText("Structure");
         structureList = new JComboBox();
 
         JLabel chooseFileLabel = new JLabel();
-        chooseFileLabel.setText("Choose File");
+        chooseFileLabel.setText("File");
         fileNameTextField = new JTextField(20);
         browserFileButton = new JButton();
         browserFileButton.setText("Browse");
@@ -79,6 +74,12 @@ public class ParserView extends AbstractViewPanel {
         detailTable.setFillsViewportHeight(true);
         JScrollPane detailScrollPane = new JScrollPane(detailTable);
 
+        addButton  = new JButton();
+        addButton.setText("Add");
+
+        deleteButton = new JButton();
+        deleteButton.setText("Delete");
+
         JLabel footerLabel = new JLabel();
         footerLabel.setText("Footer");
         footerLabel.setOpaque(true);
@@ -87,9 +88,6 @@ public class ParserView extends AbstractViewPanel {
         footerTable = new JTable();
         footerTable.setFillsViewportHeight(true);
         JScrollPane footerScrollPane = new JScrollPane(footerTable);
-
-        backButton = new JButton();
-        backButton.setText("Back");
 
         saveAsTemplateButton = new JButton();
         saveAsTemplateButton.setText("Save as Template");
@@ -123,10 +121,13 @@ public class ParserView extends AbstractViewPanel {
                 .addComponent(headerScrollPane)
                 .addComponent(detailLabel,0,GroupLayout.DEFAULT_SIZE,Short.MAX_VALUE)
                 .addComponent(detailScrollPane)
+                .addGroup(layout.createSequentialGroup()
+                        .addComponent(addButton)
+                        .addComponent(deleteButton)
+                )
                 .addComponent(footerLabel,0,GroupLayout.DEFAULT_SIZE,Short.MAX_VALUE)
                 .addComponent(footerScrollPane)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(backButton)
                     .addComponent(saveAsTemplateButton)
                     .addComponent(saveFileButton)
                 )
@@ -149,10 +150,13 @@ public class ParserView extends AbstractViewPanel {
                 .addComponent(headerScrollPane)
                 .addComponent(detailLabel)
                 .addComponent(detailScrollPane)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(addButton)
+                        .addComponent(deleteButton)
+                )
                 .addComponent(footerLabel)
                 .addComponent(footerScrollPane)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                        .addComponent(backButton)
                         .addComponent(saveAsTemplateButton)
                         .addComponent(saveFileButton)
                 )
@@ -162,6 +166,7 @@ public class ParserView extends AbstractViewPanel {
     }
     private void localInitialization(){
         List<StructureFile> list = controller.getStructureList();
+        structureList.addItem("- Select -");
         for(int i = 0; i < list.size(); i++){
             StructureFile sf = (StructureFile) list.get(i);
             structureList.addItem(sf.getStructureName());
@@ -210,7 +215,14 @@ public class ParserView extends AbstractViewPanel {
             }
         });
 
-        backButton.addActionListener(new ActionListener() {
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 

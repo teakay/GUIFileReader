@@ -31,7 +31,7 @@ public class MainController implements ListSelectionListener {
                 controller.addView(parserView);
                 mainFrame.setContentScrollPane(parserView);
             } else if (Constants.MENU[3].equals(selectedMenu)) {
-                FileCreatorView fileCreatorView = new FileCreatorView(new AbstractController());
+                FileCreatorView fileCreatorView = new FileCreatorView(new FileCreatorController());
                 mainFrame.setContentScrollPane(fileCreatorView);
             } else {
                 JLabel label = new JLabel();
