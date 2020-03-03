@@ -64,7 +64,16 @@ public class ParserView extends AbstractViewPanel {
         headerLabel.setOpaque(true);
         headerLabel.setBackground(Color.LIGHT_GRAY);
 
-        headerTable = new JTable();
+        headerTable = new JTable(){
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component component = super.prepareRenderer(renderer, row, column);
+                int rendererWidth = component.getPreferredSize().width;
+                TableColumn tableColumn = getColumnModel().getColumn(column);
+                tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
+                return component;
+            }
+        };
         headerTable.setFillsViewportHeight(true);
         JScrollPane headerScrollPane = new JScrollPane(headerTable);
 
@@ -83,7 +92,6 @@ public class ParserView extends AbstractViewPanel {
                 return component;
             }
         };
-        detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         JScrollPane detailScrollPane = new JScrollPane(detailTable);
 
@@ -98,7 +106,16 @@ public class ParserView extends AbstractViewPanel {
         footerLabel.setOpaque(true);
         footerLabel.setBackground(Color.LIGHT_GRAY);
 
-        footerTable = new JTable();
+        footerTable = new JTable(){
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component component = super.prepareRenderer(renderer, row, column);
+                int rendererWidth = component.getPreferredSize().width;
+                TableColumn tableColumn = getColumnModel().getColumn(column);
+                tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
+                return component;
+            }
+        };
         footerTable.setFillsViewportHeight(true);
         JScrollPane footerScrollPane = new JScrollPane(footerTable);
 
@@ -212,6 +229,11 @@ public class ParserView extends AbstractViewPanel {
                 }
                 headerModel.addRow((Vector)parseMap.get("header"));
                 headerTable.setModel(headerModel);
+                if(headerModel.getColumnCount() > 8) {
+                    headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                }else {
+                    headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                }
 
                 DefaultTableModel detailModel = new DefaultTableModel();
                 List detailList = (List)columnMap.get("detail");
@@ -223,6 +245,11 @@ public class ParserView extends AbstractViewPanel {
                     detailModel.addRow((Vector)detailDataList.get(n));
                 }
                 detailTable.setModel(detailModel);
+                if(detailModel.getColumnCount() > 8) {
+                    detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                }else{
+                    detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                }
 
                 DefaultTableModel footerModel = new DefaultTableModel();
                 List footerList = (List)columnMap.get("footer");
@@ -231,20 +258,33 @@ public class ParserView extends AbstractViewPanel {
                 }
                 footerModel.addRow((Vector)parseMap.get("footer"));
                 footerTable.setModel(footerModel);
+                if(footerModel.getColumnCount() > 8) {
+                    footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                }else{
+                    footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                }
             }
         });
 
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                Vector vector = new Vector();
+                for(int i = 0; i < detailTable.getModel().getColumnCount(); i++)
+                {
+                    vector.add(null);
+                }
+                ((DefaultTableModel) detailTable.getModel()).addRow(vector);
             }
         });
 
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                int[] row = detailTable.getSelectedRows();
+                for(int i = 0; i < row.length; i++){
+                    ((DefaultTableModel)detailTable.getModel()).removeRow(row[i]);
+                }
             }
         });
 
@@ -258,6 +298,27 @@ public class ParserView extends AbstractViewPanel {
         saveFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(headerTable.isEditing()){
+                    headerTable.getCellEditor().stopCellEditing();
+                }
+                if(detailTable.isEditing()){
+                    detailTable.getCellEditor().stopCellEditing();
+                }
+                if(footerTable.isEditing()){
+                    footerTable.getCellEditor().stopCellEditing();
+                }
+
+                JFrame parentFrame = new JFrame();
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Specify a file to Save");
+
+                int userSelection = fileChooser.showSaveDialog(parentFrame);
+                String filePath = "";
+                if(userSelection == JFileChooser.APPROVE_OPTION) {
+                    File fileToSave = fileChooser.getSelectedFile();
+                    filePath = fileToSave.getAbsolutePath();
+                }
+                controller.saveAsFile((String)structureList.getSelectedItem(),headerTable, detailTable, footerTable, filePath);
 
             }
         });

@@ -11,6 +11,7 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -49,11 +50,8 @@ public class FileCreatorView extends AbstractViewPanel {
         titleLabel.setFont(new Font("Arial",Font.BOLD,18));
 
         JLabel chooseTemplateLabel = new JLabel();
-        chooseTemplateLabel.setText("Template");
+        chooseTemplateLabel.setText("Template Data");
         templateComboBox = new JComboBox();
-
-        JLabel orLabel = new JLabel();
-        orLabel.setText("OR");
 
         JLabel chooseStructureLabel = new JLabel();
         chooseStructureLabel.setText("Structure");
@@ -94,8 +92,6 @@ public class FileCreatorView extends AbstractViewPanel {
                 return component;
             }
         };
-        detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        detailTable.setPreferredScrollableViewportSize( new Dimension( 450, 160 ) );
         JScrollPane detailScrollPane = new JScrollPane(detailTable);
 
         addButton = new JButton();
@@ -133,13 +129,12 @@ public class FileCreatorView extends AbstractViewPanel {
                 .addComponent(titleLabel,0,GroupLayout.DEFAULT_SIZE,Short.MAX_VALUE)
                 .addGroup(layout.createSequentialGroup()
                     .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(chooseTemplateLabel)
                             .addComponent(chooseStructureLabel)
-                            .addComponent(orLabel)
+                            .addComponent(chooseTemplateLabel)
                     )
                     .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(templateComboBox,0,100,200)
                             .addComponent(structureComboBox,0,100,200)
+                            .addComponent(templateComboBox,0,100,200)
                     )
                 )
                     .addComponent(startButton)
@@ -160,14 +155,15 @@ public class FileCreatorView extends AbstractViewPanel {
         layout.setVerticalGroup(layout.createSequentialGroup()
                 .addComponent(titleLabel)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                        .addComponent(chooseTemplateLabel)
-                        .addComponent(templateComboBox)
-                )
-                .addComponent(orLabel)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(chooseStructureLabel)
                         .addComponent(structureComboBox)
                 )
+
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(chooseTemplateLabel)
+                        .addComponent(templateComboBox)
+                )
+
                 .addComponent(startButton)
                 .addComponent(headerLabel)
                 .addComponent(headerScrollPane)
@@ -206,6 +202,11 @@ public class FileCreatorView extends AbstractViewPanel {
                 }
                 headerModel.addRow(rowDataHeader);
                 headerTable.setModel(headerModel);
+                if(headerModel.getColumnCount() > 8) {
+                    headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                }else {
+                    headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                }
 
                 detailModel = new DefaultTableModel();
                 List detailList = (List)columnMap.get("detail");
@@ -216,6 +217,11 @@ public class FileCreatorView extends AbstractViewPanel {
                 }
                 detailModel.addRow(rowDataDetail);
                 detailTable.setModel(detailModel);
+                if(detailModel.getColumnCount() > 8) {
+                    detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                }else {
+                    detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                }
 
                 footerModel = new DefaultTableModel();
                 List footerList = (List)columnMap.get("footer");
@@ -226,6 +232,11 @@ public class FileCreatorView extends AbstractViewPanel {
                 }
                 footerModel.addRow(rowDataFooter);
                 footerTable.setModel(footerModel);
+                if(footerModel.getColumnCount() > 8) {
+                    footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                }else {
+                    footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                }
             }
         });
 
@@ -260,7 +271,18 @@ public class FileCreatorView extends AbstractViewPanel {
                 if(footerTable.isEditing()){
                     footerTable.getCellEditor().stopCellEditing();
                 }
-                controller.saveAsFile();
+
+                JFrame parentFrame = new JFrame();
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Specify a file to Save");
+
+                int userSelection = fileChooser.showSaveDialog(parentFrame);
+                String filePath = "";
+                if(userSelection == JFileChooser.APPROVE_OPTION) {
+                    File fileToSave = fileChooser.getSelectedFile();
+                    filePath = fileToSave.getAbsolutePath();
+                }
+                controller.saveAsFile((String)structureComboBox.getSelectedItem(),headerTable, detailTable, footerTable, filePath);
             }
         });
     }
