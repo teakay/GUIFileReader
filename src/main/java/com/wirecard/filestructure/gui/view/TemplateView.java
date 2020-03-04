@@ -2,9 +2,18 @@ package com.wirecard.filestructure.gui.view;
 
 import com.wirecard.filestructure.gui.controller.TemplateController;
 import com.wirecard.filestructure.gui.entity.Template;
+import com.wirecard.filestructure.gui.utils.Constants;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 public class TemplateView extends AbstractViewPanel {
 
@@ -18,6 +27,8 @@ public class TemplateView extends AbstractViewPanel {
     private JButton searchButton;
     private JTable templateTable;
     private JButton deleteButton;
+    private  DefaultTableModel model = new DefaultTableModel();
+    private TableRowSorter<TableModel> rowSorter;
 
     public TemplateView(TemplateController controller){
         this.controller = controller;
@@ -42,7 +53,13 @@ public class TemplateView extends AbstractViewPanel {
             tableLabel.setOpaque(true);
             tableLabel.setBackground(Color.LIGHT_GRAY);
 
-            templateTable = new JTable();
+            String[] columnName = Constants.TEMPLATE_TABLE_COLUMN;
+            for(int i = 0; i < columnName.length; i++){
+                model.addColumn(columnName[i]);
+            }
+            templateTable = new JTable(model);
+            rowSorter = new TableRowSorter<TableModel>(templateTable.getModel());
+            templateTable.setRowSorter(rowSorter);
             templateTable.setFillsViewportHeight(true);
             JScrollPane templateScrollPane = new JScrollPane(templateTable);
 
@@ -83,6 +100,30 @@ public class TemplateView extends AbstractViewPanel {
     }
 
     protected void localInitialization(){
+        List templateList = controller.getTemplateList();
+        for(int i = 0; i < templateList.size(); i++) {
+            model.addRow((Vector)templateList.get(i));
+        }
 
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchTextField.getText()));
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               List ids = new ArrayList();
+               int[] rows = templateTable.getSelectedRows();
+
+               for(int i = 0; i < rows.length; i++){
+                   ids.add(templateTable.getValueAt(rows[i],0));
+               }
+               controller.deleteTemplate(ids);
+               removeRow(templateTable);
+            }
+        });
     }
 }

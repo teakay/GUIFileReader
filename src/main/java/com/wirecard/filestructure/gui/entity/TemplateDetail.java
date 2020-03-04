@@ -24,6 +24,9 @@ public class TemplateDetail {
     @Column(name = "td_data_type")
     private String dataType;
 
+    @Column(name = "td_data_row_no")
+    private Integer rowNo;
+
     @Column(name = "td_data_sequence_no")
     private Integer dataSequenceNo;
 
@@ -33,6 +36,17 @@ public class TemplateDetail {
     @Column(name = "td_field_value")
     private String fieldValue;
 
+    public TemplateDetail(){
+
+    }
+    public TemplateDetail(Template template, String dataType, Integer rowNo, Integer dataSequenceNo, String fieldName, String fieldValue){
+        this.template = template;
+        this.dataType = dataType;
+        this.rowNo = rowNo;
+        this.dataSequenceNo = dataSequenceNo;
+        this.fieldName = fieldName;
+        this.fieldValue = fieldValue;
+    }
     public String getId() {
         return id;
     }
@@ -55,6 +69,14 @@ public class TemplateDetail {
 
     public void setDataType(String dataType) {
         this.dataType = dataType;
+    }
+
+    public Integer getRowNo() {
+        return rowNo;
+    }
+
+    public void setRowNo(Integer rowNo) {
+        this.rowNo = rowNo;
     }
 
     public Integer getDataSequenceNo() {

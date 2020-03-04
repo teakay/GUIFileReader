@@ -22,6 +22,7 @@ sfd_description text
 
 CREATE TABLE template(
 t_id varchar(100) PRIMARY KEY,
+sf_id varchar(100),
 t_name varchar(100) NOT NULL UNIQUE,
 t_created_date DATE
 );
@@ -30,6 +31,7 @@ CREATE TABLE template_detail(
 td_id varchar(100) PRIMARY KEY,
 t_id varchar(100),
 td_data_type varchar(100),
+td_data_row_no int,
 td_data_sequence_no int,
 td_field_name varchar(255),
 td_field_value varchar(255)

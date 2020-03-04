@@ -251,5 +251,21 @@ public class StructureFileService {
             throw e;
         }
     }
+    public static StructureFile getStructureFileByName(String structureName) throws Exception {
+        StructureFile structureFile = null;
+        try{
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
 
+            Query q = session.createQuery(QUERY_GET_STRUCTURE_FILE_BY_NAME);
+            q.setString("structureName", structureName);
+            structureFile = (StructureFile)q.uniqueResult();
+
+            session.getTransaction().commit();
+            session.close();
+        }catch (Exception e){
+            throw e;
+        }
+        return structureFile;
+    }
 }

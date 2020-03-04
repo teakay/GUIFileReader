@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class TestFile {
 
-    public static void main(String[] args){
+    public static void justForTest(String[] args){
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader("C:\\Users\\wulantika.nuraeni\\Downloads\\UATlogs\\CTL_SIAMMAKRO_271120190921_00.txt"));
 //            File file = new File("C:\\Users\\wulantika.nuraeni\\Downloads\\UATlogs\\CTL_SIAMMAKRO_271120190921_00.txt");

@@ -55,8 +55,15 @@ public class InstructionFileTableModel extends AbstractTableModel {
         }
     }
 
-    public void addRow(Vector dataRow){
-        data.add(dataRow);
+    public void addRow(int index, Vector dataRow){
+        data.add(index, dataRow);
+        if(getRowCount() != index+1){
+            for(int i = index+1; i < getRowCount(); i++){
+                Vector vector = data.get(i);
+                vector.set(1,new Integer(i+1));
+                data.set(i,vector);
+            }
+        }
        fireTableDataChanged();
     }
 
@@ -81,6 +88,14 @@ public class InstructionFileTableModel extends AbstractTableModel {
             selectedList.add(data.get(row[i]));
         }
         data.removeAll(selectedList);
+
+        //rearrange index
+        for(int i = 0; i < data.size(); i++){
+            Vector vector = data.get(i);
+            vector.set(1,new Integer(i+1));
+            data.set(i,vector);
+        }
+
         fireTableDataChanged();
     }
 

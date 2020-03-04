@@ -14,6 +14,10 @@ public class Template {
     @Column(name="t_id",updatable = false,nullable = false)
     private String id;
 
+    @ManyToOne
+    @JoinColumn(name="sf_id")
+    private StructureFile structureFile;
+
     @Column(name="t_name")
     private String name;
 
@@ -23,8 +27,9 @@ public class Template {
 
     public Template(){}
 
-    public Template(String name, Date createdDate){
+    public Template(String name, StructureFile structureFile, Date createdDate){
         this.name = name;
+        this.structureFile = structureFile;
         this.createdDate = createdDate;
     }
 
@@ -34,6 +39,14 @@ public class Template {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public StructureFile getStructureFile() {
+        return structureFile;
+    }
+
+    public void setStructureFile(StructureFile structureFile) {
+        this.structureFile = structureFile;
     }
 
     public String getName() {

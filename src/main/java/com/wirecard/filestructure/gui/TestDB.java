@@ -28,7 +28,7 @@ public class TestDB {
 
         return  sessionFactory;
     }
-    public static void main(String[] args){
+    public static void justForTest(String[] args){
         configureSessionFactory();
 
         Session session = null;

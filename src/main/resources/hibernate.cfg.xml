@@ -14,5 +14,7 @@
 
         <mapping class="com.wirecard.filestructure.gui.entity.StructureFile"/>
         <mapping class="com.wirecard.filestructure.gui.entity.StructureFileDetail"/>
+        <mapping class="com.wirecard.filestructure.gui.entity.Template"/>
+        <mapping class="com.wirecard.filestructure.gui.entity.TemplateDetail"/>
     </session-factory>
 </hibernate-configuration>

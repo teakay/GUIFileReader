@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class TestSaveFile {
 
-    public static void main(String[] args){
+    public static void justForTest(String[] args){
         JFrame parentFrame = new JFrame();
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Specify a file to Save");

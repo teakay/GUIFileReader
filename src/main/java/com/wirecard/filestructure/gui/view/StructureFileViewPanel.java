@@ -107,10 +107,6 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
         );
     }
 
-    public AbstractViewPanel getContainer(){
-        return this;
-    }
-
     private void localInitialization(){
         structureTableModel.addRow(controller.getStructureFileList());
         structureFileTable.removeColumn(structureFileTable.getColumnModel().getColumn(0)); //hide column ID

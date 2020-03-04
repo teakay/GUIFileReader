@@ -3,6 +3,7 @@ package com.wirecard.filestructure.gui.view;
 import com.wirecard.filestructure.gui.controller.AbstractController;
 import com.wirecard.filestructure.gui.controller.FileCreatorController;
 import com.wirecard.filestructure.gui.entity.StructureFile;
+import com.wirecard.filestructure.gui.entity.Template;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -11,6 +12,8 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -186,56 +189,108 @@ public class FileCreatorView extends AbstractViewPanel {
             structureComboBox.addItem(sf.getStructureName());
         }
 
+
+        templateComboBox.addItem("- Select -");
+
+        structureComboBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                String selectedStructure = (String) e.getItem();
+                if(!selectedStructure.equals("- Select -")) {
+
+                    templateComboBox.removeAllItems();
+                    templateComboBox.addItem("- Select -");
+
+                    List<Template> templateList = controller.getTemplateListByStructure(selectedStructure);
+                    for (int i = 0; i < templateList.size(); i++) {
+                        Template template = (Template) templateList.get(i);
+                        templateComboBox.addItem(template.getName());
+                    }
+                }
+
+            }
+        });
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String structureName = (String)structureComboBox.getSelectedItem();
-
-                Map columnMap = controller.getColumnFromStructure(structureName);
-
-                headerModel = new DefaultTableModel();
-                List headerList = (List)columnMap.get("header");
-                Vector rowDataHeader = new Vector();
-                for(int i = 0; i < headerList.size(); i++) {
-                    headerModel.addColumn(headerList.get(i));
-                    rowDataHeader.add(null);
-                }
-                headerModel.addRow(rowDataHeader);
-                headerTable.setModel(headerModel);
-                if(headerModel.getColumnCount() > 8) {
-                    headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                if(structureComboBox.getSelectedItem().equals("- Select -")) {
+                    MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(startButton);
+                    JOptionPane.showMessageDialog(mainFrame,
+                            "Please Select Structure",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }else {
-                    headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-                }
+                    String structureName = (String) structureComboBox.getSelectedItem();
+                    String templateName = (String) templateComboBox.getSelectedItem();
 
-                detailModel = new DefaultTableModel();
-                List detailList = (List)columnMap.get("detail");
-                Vector rowDataDetail = new Vector();
-                for(int i = 0; i < detailList.size(); i++) {
-                    detailModel.addColumn(detailList.get(i));
-                    rowDataDetail.add(null);
-                }
-                detailModel.addRow(rowDataDetail);
-                detailTable.setModel(detailModel);
-                if(detailModel.getColumnCount() > 8) {
-                    detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                }else {
-                    detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-                }
+                    Map columnMap = controller.getColumnFromStructure(structureName);
+                    Map dataMap = controller.getTemplateDetailByName(templateName);
+                    List headerDataList = (List)dataMap.get("header");
+                    List detailDataList = (List)dataMap.get("detail");
+                    List footerDataList = (List)dataMap.get("footer");
 
-                footerModel = new DefaultTableModel();
-                List footerList = (List)columnMap.get("footer");
-                Vector rowDataFooter = new Vector();
-                for(int i = 0; i < footerList.size(); i++) {
-                    footerModel.addColumn(footerList.get(i));
-                    rowDataFooter.add(null);
-                }
-                footerModel.addRow(rowDataFooter);
-                footerTable.setModel(footerModel);
-                if(footerModel.getColumnCount() > 8) {
-                    footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                }else {
-                    footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                    headerModel = new DefaultTableModel();
+                    List headerList = (List) columnMap.get("header");
+                    Vector rowDataHeader = new Vector();
+                    for (int i = 0; i < headerList.size(); i++) {
+                        headerModel.addColumn(headerList.get(i));
+                        rowDataHeader.add(null);
+                    }
+                    if(dataMap.isEmpty()) {
+                        headerModel.addRow(rowDataHeader);
+                    }else{
+                        for(int i = 0; i < headerDataList.size(); i++){
+                            headerModel.addRow((Vector)headerDataList.get(i));
+                        }
+                    }
+                    headerTable.setModel(headerModel);
+                    if (headerModel.getColumnCount() > 8) {
+                        headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                    } else {
+                        headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                    }
+
+                    detailModel = new DefaultTableModel();
+                    List detailList = (List) columnMap.get("detail");
+                    Vector rowDataDetail = new Vector();
+                    for (int i = 0; i < detailList.size(); i++) {
+                        detailModel.addColumn(detailList.get(i));
+                        rowDataDetail.add(null);
+                    }
+                    if(dataMap.isEmpty()) {
+                        detailModel.addRow(rowDataDetail);
+                    }else{
+                        for(int i = 0; i < detailDataList.size(); i++){
+                            detailModel.addRow((Vector)detailDataList.get(i));
+                        }
+                    }
+                    detailTable.setModel(detailModel);
+                    if (detailModel.getColumnCount() > 8) {
+                        detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                    } else {
+                        detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                    }
+
+                    footerModel = new DefaultTableModel();
+                    List footerList = (List) columnMap.get("footer");
+                    Vector rowDataFooter = new Vector();
+                    for (int i = 0; i < footerList.size(); i++) {
+                        footerModel.addColumn(footerList.get(i));
+                        rowDataFooter.add(null);
+                    }
+                    if(dataMap.isEmpty()) {
+                        footerModel.addRow(rowDataFooter);
+                    }else{
+                        for(int i = 0; i < footerDataList.size(); i++){
+                            footerModel.addRow((Vector)footerDataList.get(i));
+                        }
+                    }
+                    footerTable.setModel(footerModel);
+                    if (footerModel.getColumnCount() > 8) {
+                        footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                    } else {
+                        footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                    }
                 }
             }
         });
@@ -252,37 +307,42 @@ public class FileCreatorView extends AbstractViewPanel {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               int[] row = detailTable.getSelectedRows();
-               for(int i = 0; i <= row.length; i++){
-                   detailModel.removeRow(row[i] - 1);
-               }
+                removeRow(detailTable);
             }
         });
 
         saveFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(headerTable.isEditing()){
-                    headerTable.getCellEditor().stopCellEditing();
-                }
-                if(detailTable.isEditing()){
-                    detailTable.getCellEditor().stopCellEditing();
-                }
-                if(footerTable.isEditing()){
-                    footerTable.getCellEditor().stopCellEditing();
-                }
+                if (headerTable.getModel().getRowCount() == 0 || detailTable.getModel().getRowCount() == 0 || footerTable.getModel().getRowCount() == 0) {
+                    MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(saveFileButton);
+                    JOptionPane.showMessageDialog(mainFrame,
+                            "Please Fill data",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    if (headerTable.isEditing()) {
+                        headerTable.getCellEditor().stopCellEditing();
+                    }
+                    if (detailTable.isEditing()) {
+                        detailTable.getCellEditor().stopCellEditing();
+                    }
+                    if (footerTable.isEditing()) {
+                        footerTable.getCellEditor().stopCellEditing();
+                    }
 
-                JFrame parentFrame = new JFrame();
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setDialogTitle("Specify a file to Save");
+                    JFrame parentFrame = new JFrame();
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setDialogTitle("Specify a file to Save");
 
-                int userSelection = fileChooser.showSaveDialog(parentFrame);
-                String filePath = "";
-                if(userSelection == JFileChooser.APPROVE_OPTION) {
-                    File fileToSave = fileChooser.getSelectedFile();
-                    filePath = fileToSave.getAbsolutePath();
+                    int userSelection = fileChooser.showSaveDialog(parentFrame);
+                    String filePath = "";
+                    if (userSelection == JFileChooser.APPROVE_OPTION) {
+                        File fileToSave = fileChooser.getSelectedFile();
+                        filePath = fileToSave.getAbsolutePath();
+                    }
+                    controller.saveAsFile((String) structureComboBox.getSelectedItem(), headerTable, detailTable, footerTable, filePath);
                 }
-                controller.saveAsFile((String)structureComboBox.getSelectedItem(),headerTable, detailTable, footerTable, filePath);
             }
         });
     }

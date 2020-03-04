@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -218,50 +219,53 @@ public class ParserView extends AbstractViewPanel {
         parseFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String structureName = (String)structureList.getSelectedItem();
-                Map columnMap = controller.getColumnFromStructure(structureName);
-                Map parseMap = controller.parseFile(fileNameTextField.getText(),columnMap);
+                if(isDataValid()){
+                    String structureName = (String) structureList.getSelectedItem();
+                    Map columnMap = controller.getColumnFromStructure(structureName);
 
-                DefaultTableModel headerModel = new DefaultTableModel();
-                List headerList = (List)columnMap.get("header");
-                for(int i = 0; i < headerList.size(); i++) {
-                    headerModel.addColumn(headerList.get(i));
-                }
-                headerModel.addRow((Vector)parseMap.get("header"));
-                headerTable.setModel(headerModel);
-                if(headerModel.getColumnCount() > 8) {
-                    headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                }else {
-                    headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-                }
+                    Map parseMap = controller.parseFile(fileNameTextField.getText(), columnMap);
 
-                DefaultTableModel detailModel = new DefaultTableModel();
-                List detailList = (List)columnMap.get("detail");
-                for(int i = 0; i < detailList.size(); i++) {
-                    detailModel.addColumn(detailList.get(i));
-                }
-                List detailDataList = (List) parseMap.get("detail");
-                for (int n = 0; n < detailDataList.size(); n++){
-                    detailModel.addRow((Vector)detailDataList.get(n));
-                }
-                detailTable.setModel(detailModel);
-                if(detailModel.getColumnCount() > 8) {
-                    detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                }else{
-                    detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-                }
+                    DefaultTableModel headerModel = new DefaultTableModel();
+                    List headerList = (List) columnMap.get("header");
+                    for (int i = 0; i < headerList.size(); i++) {
+                        headerModel.addColumn(headerList.get(i));
+                    }
+                    headerModel.addRow((Vector) parseMap.get("header"));
+                    headerTable.setModel(headerModel);
+                    if (headerModel.getColumnCount() > 8) {
+                        headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                    } else {
+                        headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                    }
 
-                DefaultTableModel footerModel = new DefaultTableModel();
-                List footerList = (List)columnMap.get("footer");
-                for(int i = 0; i < footerList.size(); i++) {
-                    footerModel.addColumn(footerList.get(i));
-                }
-                footerModel.addRow((Vector)parseMap.get("footer"));
-                footerTable.setModel(footerModel);
-                if(footerModel.getColumnCount() > 8) {
-                    footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                }else{
-                    footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                    DefaultTableModel detailModel = new DefaultTableModel();
+                    List detailList = (List) columnMap.get("detail");
+                    for (int i = 0; i < detailList.size(); i++) {
+                        detailModel.addColumn(detailList.get(i));
+                    }
+                    List detailDataList = (List) parseMap.get("detail");
+                    for (int n = 0; n < detailDataList.size(); n++) {
+                        detailModel.addRow((Vector) detailDataList.get(n));
+                    }
+                    detailTable.setModel(detailModel);
+                    if (detailModel.getColumnCount() > 8) {
+                        detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                    } else {
+                        detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                    }
+
+                    DefaultTableModel footerModel = new DefaultTableModel();
+                    List footerList = (List) columnMap.get("footer");
+                    for (int i = 0; i < footerList.size(); i++) {
+                        footerModel.addColumn(footerList.get(i));
+                    }
+                    footerModel.addRow((Vector) parseMap.get("footer"));
+                    footerTable.setModel(footerModel);
+                    if (footerModel.getColumnCount() > 8) {
+                        footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                    } else {
+                        footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                    }
                 }
             }
         });
@@ -281,46 +285,99 @@ public class ParserView extends AbstractViewPanel {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int[] row = detailTable.getSelectedRows();
-                for(int i = 0; i < row.length; i++){
-                    ((DefaultTableModel)detailTable.getModel()).removeRow(row[i]);
-                }
+               removeRow(detailTable);
             }
         });
 
         saveAsTemplateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (isDataValid() && isParsingDataNotEmpty()) {
+                    if (headerTable.isEditing()) {
+                        headerTable.getCellEditor().stopCellEditing();
+                    }
+                    if (detailTable.isEditing()) {
+                        detailTable.getCellEditor().stopCellEditing();
+                    }
+                    if (footerTable.isEditing()) {
+                        footerTable.getCellEditor().stopCellEditing();
+                    }
+                    String templateName = JOptionPane.showInputDialog("Enter Template Name :");
+                    controller.saveAsTemplate((String) structureList.getSelectedItem(), headerTable, detailTable, footerTable, templateName);
 
+                    MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(parseFileButton);
+                    JOptionPane.showMessageDialog(mainFrame,
+                            "Successfully saved as template",
+                            "Success",
+                            JOptionPane.PLAIN_MESSAGE);
+                }
+                controller.goToTemplateView(getContainer());
             }
         });
 
         saveFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(headerTable.isEditing()){
-                    headerTable.getCellEditor().stopCellEditing();
-                }
-                if(detailTable.isEditing()){
-                    detailTable.getCellEditor().stopCellEditing();
-                }
-                if(footerTable.isEditing()){
-                    footerTable.getCellEditor().stopCellEditing();
-                }
+                if(isDataValid() && isParsingDataNotEmpty()) {
+                    if (headerTable.isEditing()) {
+                        headerTable.getCellEditor().stopCellEditing();
+                    }
+                    if (detailTable.isEditing()) {
+                        detailTable.getCellEditor().stopCellEditing();
+                    }
+                    if (footerTable.isEditing()) {
+                        footerTable.getCellEditor().stopCellEditing();
+                    }
 
-                JFrame parentFrame = new JFrame();
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setDialogTitle("Specify a file to Save");
+                    JFrame parentFrame = new JFrame();
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setDialogTitle("Specify a file to Save");
 
-                int userSelection = fileChooser.showSaveDialog(parentFrame);
-                String filePath = "";
-                if(userSelection == JFileChooser.APPROVE_OPTION) {
-                    File fileToSave = fileChooser.getSelectedFile();
-                    filePath = fileToSave.getAbsolutePath();
+                    int userSelection = fileChooser.showSaveDialog(parentFrame);
+                    String filePath = "";
+                    if (userSelection == JFileChooser.APPROVE_OPTION) {
+                        File fileToSave = fileChooser.getSelectedFile();
+                        filePath = fileToSave.getAbsolutePath();
+                    }
+                    controller.saveAsFile((String) structureList.getSelectedItem(), headerTable, detailTable, footerTable, filePath);
                 }
-                controller.saveAsFile((String)structureList.getSelectedItem(),headerTable, detailTable, footerTable, filePath);
-
             }
         });
+    }
+
+    private boolean isDataValid(){
+        boolean isDataValid =  false;
+
+        if(structureList.getSelectedItem().equals("- Select -")){
+            MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(parseFileButton);
+            JOptionPane.showMessageDialog(mainFrame,
+                    "Please Choose Structure",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }else if(fileNameTextField.getText().equals("") ) {
+            MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(parseFileButton);
+            JOptionPane.showMessageDialog(mainFrame,
+                    "File Must Not Be Empty",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+
+        }else{
+            isDataValid = true;
+        }
+        return isDataValid;
+    }
+
+    private boolean isParsingDataNotEmpty(){
+        boolean isDataValid =  false;
+        if(headerTable.getModel().getRowCount() == 0 || detailTable.getModel().getRowCount() == 0 || footerTable.getModel().getRowCount() == 0) {
+            MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(parseFileButton);
+            JOptionPane.showMessageDialog(mainFrame,
+                    "Please Fill data",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }else{
+            isDataValid = true;
+        }
+        return  isDataValid;
     }
 }

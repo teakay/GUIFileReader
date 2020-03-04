@@ -8,5 +8,5 @@ public class Constants {
             {"Pay File","txt","30-01-2020",false}
     };
     public final static String[] INSTRUCTION_FILE_TABLE_COLUMN = {"ID","No","Field Name","Mandatory","Data Type","Length","Sample","Description"};
-
+    public final static String[] TEMPLATE_TABLE_COLUMN = {"ID","Name","Created Date"};
 }

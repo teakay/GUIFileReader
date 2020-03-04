@@ -2,8 +2,17 @@ package com.wirecard.filestructure.gui.controller;
 
 import com.wirecard.filestructure.gui.entity.StructureFile;
 import com.wirecard.filestructure.gui.entity.StructureFileDetail;
+import com.wirecard.filestructure.gui.entity.Template;
+import com.wirecard.filestructure.gui.entity.TemplateDetail;
 import com.wirecard.filestructure.gui.service.StructureFileService;
+import com.wirecard.filestructure.gui.service.TemplateService;
+import com.wirecard.filestructure.gui.view.AbstractViewPanel;
+import com.wirecard.filestructure.gui.view.MainFrame;
+import com.wirecard.filestructure.gui.view.StructureFileViewPanel;
+import com.wirecard.filestructure.gui.view.TemplateView;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -11,6 +20,8 @@ import java.io.IOException;
 import java.util.*;
 
 public class ParserController extends DefaultTableController {
+    private TemplateService templateService;
+
 
     public Map parseFile(String filePathAndName, Map columnMap){
         Map returnMap = new HashMap();
@@ -76,4 +87,65 @@ public class ParserController extends DefaultTableController {
         return  returnMap;
     }
 
+    public void saveAsTemplate(String structureName, JTable headerTable, JTable detailTable, JTable footerTable, String templateName){
+        System.out.println(templateName);
+
+        List templateDetailList = new ArrayList();
+
+        int headerRow = headerTable.getRowCount();
+        int headerColumn = headerTable.getColumnCount();
+
+        int detailRow = detailTable.getRowCount();
+        int detailCol = detailTable.getColumnCount();
+
+        int footerRow = footerTable.getRowCount();
+        int footerCol = footerTable.getColumnCount();
+
+        StructureFile structureFile = null;
+        try {
+            structureFile = structureFileService.getStructureFileByName(structureName);
+
+            Template template = new Template(templateName, structureFile, new Date());
+
+            for(int row = 0; row < headerRow; row++){
+                for(int col = 0; col < headerColumn; col++){
+                    TemplateDetail templateDetail = new TemplateDetail(template,"header",
+                            new Integer(row + 1),col + 1, headerTable.getColumnName(col),(String)headerTable.getValueAt(row,col));
+
+                    templateDetailList.add(templateDetail);
+                }
+            }
+
+            for(int row = 0; row < detailRow; row++){
+                for(int col = 0; col < detailCol; col++){
+                    TemplateDetail templateDetail = new TemplateDetail(template,"detail",
+                            new Integer(row + 1), col + 1, detailTable.getColumnName(col),(String)detailTable.getValueAt(row,col));
+
+                    templateDetailList.add(templateDetail);
+                }
+            }
+
+            for(int row = 0; row < footerRow; row++){
+                for(int col = 0; col < footerCol; col++){
+                    TemplateDetail templateDetail = new TemplateDetail(template,"footer",
+                            new Integer(row + 1),col + 1, footerTable.getColumnName(col),(String)footerTable.getValueAt(row,col));
+
+                    templateDetailList.add(templateDetail);
+                }
+            }
+
+            templateService.saveTemplate(template, templateDetailList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void goToTemplateView(AbstractViewPanel view){
+        removeView(view);
+        TemplateView templateView = new TemplateView(new TemplateController());
+        addView(templateView);
+
+        MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(view);
+        mainFrame.setContentScrollPane(templateView);
+    }
 }

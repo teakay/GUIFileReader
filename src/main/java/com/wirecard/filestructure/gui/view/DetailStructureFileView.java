@@ -68,7 +68,7 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
         JLabel extensionLabel = new JLabel("File Extension");
         fileExtensionList = new JComboBox();
         fileExtensionList.addItem("txt");
-        fileExtensionList.addItem("csv");
+//        fileExtensionList.addItem("csv");
 
         JLabel productLabel = new JLabel("Product Name");
         productTextField = new JTextField();
@@ -252,86 +252,66 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
         addButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Vector vector = new Vector();
-                vector.add(null);
-                vector.add(headerTable.getRowCount()+1);
-                vector.add(null);
-                vector.add(null);
-                vector.add(null);
-                vector.add(null);
-                vector.add(null);
-                vector.add(null);
-
-                headerTableModel.addRow(vector);
+               addRow(headerTable,headerTableModel);
             }
         });
         deleteButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                headerTableModel.removeRow(headerTable.getSelectedRows());
+                removeRow(headerTable, headerTableModel);
             }
         });
 
         addButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Vector vector = new Vector();
-                vector.add(null);
-                vector.add(detailTable.getRowCount()+1);
-                vector.add(null);
-                vector.add(null);
-                vector.add(null);
-                vector.add(null);
-                vector.add(null);
-                vector.add(null);
-                detailTableModel.addRow(vector);
+               addRow(detailTable,detailTableModel);
             }
         });
 
         deleteButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                detailTableModel.removeRow(detailTable.getSelectedRows());
+                removeRow(detailTable, detailTableModel);
             }
         });
 
         addButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Vector vector = new Vector();
-                vector.add(null);
-                vector.add(footerTable.getRowCount()+1);
-                vector.add(null);
-                vector.add(null);
-                vector.add(null);
-                vector.add(null);
-                vector.add(null);
-                vector.add(null);
-                footerTableModel.addRow(vector);
+                addRow(footerTable,footerTableModel);
             }
         });
         deleteButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                footerTableModel.removeRow(footerTable.getSelectedRows());
+                removeRow(footerTable, footerTableModel);
             }
         });
 
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(headerTable.isEditing()){
-                    headerTable.getCellEditor().stopCellEditing();
+                if (nameTextField.getText().equals("")) {
+                    MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(saveButton);
+                    JOptionPane.showMessageDialog(mainFrame,
+                            "File Structure Name Must Not Be Empty",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    if (headerTable.isEditing()) {
+                        headerTable.getCellEditor().stopCellEditing();
+                    }
+                    if (detailTable.isEditing()) {
+                        detailTable.getCellEditor().stopCellEditing();
+                    }
+                    if (footerTable.isEditing()) {
+                        footerTable.getCellEditor().stopCellEditing();
+                    }
+                    controller.doUpdate(getContainer(), headerId.getText(),
+                            nameTextField.getText(), productTextField.getText(), projectTextField.getText(),
+                            headerTableModel.getAllData(), detailTableModel.getAllData(), footerTableModel.getAllData());
                 }
-                if(detailTable.isEditing()){
-                    detailTable.getCellEditor().stopCellEditing();
-                }
-                if(footerTable.isEditing()){
-                    footerTable.getCellEditor().stopCellEditing();
-                }
-                controller.doUpdate(getContainer(),headerId.getText(),
-                        nameTextField.getText(), productTextField.getText(), projectTextField.getText(),
-                        headerTableModel.getAllData(),detailTableModel.getAllData(), footerTableModel.getAllData());
             }
         });
     }
@@ -353,8 +333,6 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
         detailTableModel.addRow((List)data.get("detail"));
         footerTableModel.addRow((List)data.get("footer"));
     }
-    private AbstractViewPanel getContainer(){
-        return this;
-    }
+
 
 }
