@@ -277,9 +277,13 @@ public class AddStructureFileView extends AbstractViewPanel {
                         footerTable.getCellEditor().stopCellEditing();
                     }
 
-                    controller.doSaveData(getContainer(), nameTextField.getText(), (String) fileExtensionList.getSelectedItem(),
-                            productTextField.getText(), projectTextField.getText(),
-                            headerTableModel.getAllData(), detailTableModel.getAllData(), footerTableModel.getAllData());
+                    try {
+                        controller.doSaveData(getContainer(), nameTextField.getText(), (String) fileExtensionList.getSelectedItem(),
+                                productTextField.getText(), projectTextField.getText(),
+                                headerTableModel.getAllData(), detailTableModel.getAllData(), footerTableModel.getAllData());
+                    } catch (Exception ex) {
+                        displayErrorMessage(ex);
+                    }
                 }
             }
         });

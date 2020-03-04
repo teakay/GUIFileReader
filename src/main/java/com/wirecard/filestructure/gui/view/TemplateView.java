@@ -100,9 +100,13 @@ public class TemplateView extends AbstractViewPanel {
     }
 
     protected void localInitialization(){
-        List templateList = controller.getTemplateList();
-        for(int i = 0; i < templateList.size(); i++) {
-            model.addRow((Vector)templateList.get(i));
+        try {
+            List templateList = controller.getTemplateList();
+            for (int i = 0; i < templateList.size(); i++) {
+                model.addRow((Vector) templateList.get(i));
+            }
+        }catch (Exception ex){
+            displayErrorMessage(ex);
         }
 
         searchButton.addActionListener(new ActionListener() {
@@ -115,15 +119,20 @@ public class TemplateView extends AbstractViewPanel {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               List ids = new ArrayList();
-               int[] rows = templateTable.getSelectedRows();
+                try {
+                    List ids = new ArrayList();
+                    int[] rows = templateTable.getSelectedRows();
 
-               for(int i = 0; i < rows.length; i++){
-                   ids.add(templateTable.getValueAt(rows[i],0));
-               }
-               controller.deleteTemplate(ids);
-               removeRow(templateTable);
+                    for (int i = 0; i < rows.length; i++) {
+                        ids.add(templateTable.getValueAt(rows[i], 0));
+                    }
+                    controller.deleteTemplate(ids);
+                    removeRow(templateTable);
+                }catch (Exception ex){
+                    displayErrorMessage(ex);
+                }
             }
         });
     }
+
 }

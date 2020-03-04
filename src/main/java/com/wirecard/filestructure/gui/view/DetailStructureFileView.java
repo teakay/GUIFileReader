@@ -308,9 +308,13 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
                     if (footerTable.isEditing()) {
                         footerTable.getCellEditor().stopCellEditing();
                     }
-                    controller.doUpdate(getContainer(), headerId.getText(),
-                            nameTextField.getText(), productTextField.getText(), projectTextField.getText(),
-                            headerTableModel.getAllData(), detailTableModel.getAllData(), footerTableModel.getAllData());
+                    try {
+                        controller.doUpdate(getContainer(), headerId.getText(),
+                                nameTextField.getText(), productTextField.getText(), projectTextField.getText(),
+                                headerTableModel.getAllData(), detailTableModel.getAllData(), footerTableModel.getAllData());
+                    }catch (Exception ex){
+                        displayErrorMessage(ex);
+                    }
                 }
             }
         });

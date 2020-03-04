@@ -182,13 +182,16 @@ public class FileCreatorView extends AbstractViewPanel {
         );
     }
     public void localInitialization(){
-        List<StructureFile> list = controller.getStructureList();
-        structureComboBox.addItem("- Select -");
-        for(int i = 0; i < list.size(); i++){
-            StructureFile sf = (StructureFile) list.get(i);
-            structureComboBox.addItem(sf.getStructureName());
+        try {
+            List<StructureFile> list = controller.getStructureList();
+            structureComboBox.addItem("- Select -");
+            for (int i = 0; i < list.size(); i++) {
+                StructureFile sf = (StructureFile) list.get(i);
+                structureComboBox.addItem(sf.getStructureName());
+            }
+        }catch (Exception ex){
+            displayErrorMessage(ex);
         }
-
 
         templateComboBox.addItem("- Select -");
 
@@ -201,10 +204,14 @@ public class FileCreatorView extends AbstractViewPanel {
                     templateComboBox.removeAllItems();
                     templateComboBox.addItem("- Select -");
 
-                    List<Template> templateList = controller.getTemplateListByStructure(selectedStructure);
-                    for (int i = 0; i < templateList.size(); i++) {
-                        Template template = (Template) templateList.get(i);
-                        templateComboBox.addItem(template.getName());
+                    try {
+                        List<Template> templateList = controller.getTemplateListByStructure(selectedStructure);
+                        for (int i = 0; i < templateList.size(); i++) {
+                            Template template = (Template) templateList.get(i);
+                            templateComboBox.addItem(template.getName());
+                        }
+                    }catch (Exception ex){
+                        displayErrorMessage(ex);
                     }
                 }
 
@@ -220,76 +227,80 @@ public class FileCreatorView extends AbstractViewPanel {
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }else {
-                    String structureName = (String) structureComboBox.getSelectedItem();
-                    String templateName = (String) templateComboBox.getSelectedItem();
+                    try {
+                        String structureName = (String) structureComboBox.getSelectedItem();
+                        String templateName = (String) templateComboBox.getSelectedItem();
 
-                    Map columnMap = controller.getColumnFromStructure(structureName);
-                    Map dataMap = controller.getTemplateDetailByName(templateName);
-                    List headerDataList = (List)dataMap.get("header");
-                    List detailDataList = (List)dataMap.get("detail");
-                    List footerDataList = (List)dataMap.get("footer");
+                        Map columnMap = controller.getColumnFromStructure(structureName);
+                        Map dataMap = controller.getTemplateDetailByName(templateName);
+                        List headerDataList = (List) dataMap.get("header");
+                        List detailDataList = (List) dataMap.get("detail");
+                        List footerDataList = (List) dataMap.get("footer");
 
-                    headerModel = new DefaultTableModel();
-                    List headerList = (List) columnMap.get("header");
-                    Vector rowDataHeader = new Vector();
-                    for (int i = 0; i < headerList.size(); i++) {
-                        headerModel.addColumn(headerList.get(i));
-                        rowDataHeader.add(null);
-                    }
-                    if(dataMap.isEmpty()) {
-                        headerModel.addRow(rowDataHeader);
-                    }else{
-                        for(int i = 0; i < headerDataList.size(); i++){
-                            headerModel.addRow((Vector)headerDataList.get(i));
+                        headerModel = new DefaultTableModel();
+                        List headerList = (List) columnMap.get("header");
+                        Vector rowDataHeader = new Vector();
+                        for (int i = 0; i < headerList.size(); i++) {
+                            headerModel.addColumn(headerList.get(i));
+                            rowDataHeader.add(null);
                         }
-                    }
-                    headerTable.setModel(headerModel);
-                    if (headerModel.getColumnCount() > 8) {
-                        headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                    } else {
-                        headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-                    }
-
-                    detailModel = new DefaultTableModel();
-                    List detailList = (List) columnMap.get("detail");
-                    Vector rowDataDetail = new Vector();
-                    for (int i = 0; i < detailList.size(); i++) {
-                        detailModel.addColumn(detailList.get(i));
-                        rowDataDetail.add(null);
-                    }
-                    if(dataMap.isEmpty()) {
-                        detailModel.addRow(rowDataDetail);
-                    }else{
-                        for(int i = 0; i < detailDataList.size(); i++){
-                            detailModel.addRow((Vector)detailDataList.get(i));
+                        if (dataMap.isEmpty()) {
+                            headerModel.addRow(rowDataHeader);
+                        } else {
+                            for (int i = 0; i < headerDataList.size(); i++) {
+                                headerModel.addRow((Vector) headerDataList.get(i));
+                            }
                         }
-                    }
-                    detailTable.setModel(detailModel);
-                    if (detailModel.getColumnCount() > 8) {
-                        detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                    } else {
-                        detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-                    }
-
-                    footerModel = new DefaultTableModel();
-                    List footerList = (List) columnMap.get("footer");
-                    Vector rowDataFooter = new Vector();
-                    for (int i = 0; i < footerList.size(); i++) {
-                        footerModel.addColumn(footerList.get(i));
-                        rowDataFooter.add(null);
-                    }
-                    if(dataMap.isEmpty()) {
-                        footerModel.addRow(rowDataFooter);
-                    }else{
-                        for(int i = 0; i < footerDataList.size(); i++){
-                            footerModel.addRow((Vector)footerDataList.get(i));
+                        headerTable.setModel(headerModel);
+                        if (headerModel.getColumnCount() > 8) {
+                            headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                        } else {
+                            headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
                         }
-                    }
-                    footerTable.setModel(footerModel);
-                    if (footerModel.getColumnCount() > 8) {
-                        footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                    } else {
-                        footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+                        detailModel = new DefaultTableModel();
+                        List detailList = (List) columnMap.get("detail");
+                        Vector rowDataDetail = new Vector();
+                        for (int i = 0; i < detailList.size(); i++) {
+                            detailModel.addColumn(detailList.get(i));
+                            rowDataDetail.add(null);
+                        }
+                        if (dataMap.isEmpty()) {
+                            detailModel.addRow(rowDataDetail);
+                        } else {
+                            for (int i = 0; i < detailDataList.size(); i++) {
+                                detailModel.addRow((Vector) detailDataList.get(i));
+                            }
+                        }
+                        detailTable.setModel(detailModel);
+                        if (detailModel.getColumnCount() > 8) {
+                            detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                        } else {
+                            detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                        }
+
+                        footerModel = new DefaultTableModel();
+                        List footerList = (List) columnMap.get("footer");
+                        Vector rowDataFooter = new Vector();
+                        for (int i = 0; i < footerList.size(); i++) {
+                            footerModel.addColumn(footerList.get(i));
+                            rowDataFooter.add(null);
+                        }
+                        if (dataMap.isEmpty()) {
+                            footerModel.addRow(rowDataFooter);
+                        } else {
+                            for (int i = 0; i < footerDataList.size(); i++) {
+                                footerModel.addRow((Vector) footerDataList.get(i));
+                            }
+                        }
+                        footerTable.setModel(footerModel);
+                        if (footerModel.getColumnCount() > 8) {
+                            footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                        } else {
+                            footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                        }
+                    }catch (Exception ex){
+                        displayErrorMessage(ex);
                     }
                 }
             }
@@ -341,7 +352,11 @@ public class FileCreatorView extends AbstractViewPanel {
                         File fileToSave = fileChooser.getSelectedFile();
                         filePath = fileToSave.getAbsolutePath();
                     }
-                    controller.saveAsFile((String) structureComboBox.getSelectedItem(), headerTable, detailTable, footerTable, filePath);
+                    try {
+                        controller.saveAsFile((String) structureComboBox.getSelectedItem(), headerTable, detailTable, footerTable, filePath);
+                    }catch (Exception ex){
+                        displayErrorMessage(ex);
+                    }
                 }
             }
         });

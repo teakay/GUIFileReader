@@ -19,9 +19,9 @@ public class StructureFileService {
 
     public static List getStructureFileList() throws Exception {
         List<Vector> returnList = new ArrayList<Vector>();
+        Session session = HibernateUtil.getSessionFactory().openSession();
 
         try {
-            Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
 
             Query q = session.createQuery(QUERY_GET_ALL_STRUCTURE_FILE_LIST);
@@ -42,6 +42,8 @@ public class StructureFileService {
             session.getTransaction().commit();
             session.close();
         }catch (Exception e){
+            session.getTransaction().rollback();
+            session.close();
             throw e;
         }
         return returnList;
@@ -50,9 +52,9 @@ public class StructureFileService {
 
     public static List<StructureFile> getStructureFileListModel() throws Exception {
         List<StructureFile> resultList = new ArrayList<StructureFile>();
+        Session session = HibernateUtil.getSessionFactory().openSession();
 
         try {
-            Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
 
             Query q = session.createQuery(QUERY_GET_ALL_STRUCTURE_FILE_LIST);
@@ -62,6 +64,8 @@ public class StructureFileService {
             session.getTransaction().commit();
             session.close();
         }catch (Exception e){
+            session.getTransaction().rollback();
+            session.close();
             throw e;
         }
         return resultList;
@@ -70,8 +74,9 @@ public class StructureFileService {
 
     public static List getStructureFileAndDetailByStructureName(String structureName) throws Exception {
         List returnList = new ArrayList();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
         try{
-            Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
 
             Query q = session.createQuery(QUERY_GET_STRUCTURE_FILE_BY_NAME);
@@ -85,16 +90,18 @@ public class StructureFileService {
             session.getTransaction().commit();
             session.close();
         }catch (Exception e){
+            session.getTransaction().rollback();
+            session.close();
             throw e;
         }
         return returnList;
     }
 
     public static void deleteById(List<Vector> data) throws Exception {
+        Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             for(int i = 0; i < data.size(); i++) {
                 String id = (String)data.get(i).get(0);
-                Session session = HibernateUtil.getSessionFactory().openSession();
                 session.beginTransaction();
 
                 Query q = session.createQuery(QUERY_DELETE_ROW_BY_ID);
@@ -109,11 +116,15 @@ public class StructureFileService {
                 session.close();
             }
         }catch (Exception e){
+            session.getTransaction().rollback();
+            session.close();
             throw e;
         }
     }
 
     public static void saveData(Map dataMap) throws Exception {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
         try {
             String structureName = (String) dataMap.get("structureName");
             String extension = (String) dataMap.get("extension");
@@ -126,7 +137,6 @@ public class StructureFileService {
             List<Vector> detailData = (List<Vector>) dataMap.get("detailData");
             List<Vector> footerData = (List<Vector>) dataMap.get("footerData");
 
-            Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
 
             session.save(structureFile);
@@ -170,6 +180,8 @@ public class StructureFileService {
             session.getTransaction().commit();
             session.close();
         }catch (Exception e){
+            session.getTransaction().rollback();
+            session.close();
             throw e;
         }
     }
@@ -190,11 +202,11 @@ public class StructureFileService {
     }
 
     public static void updateData(Map dataMap) throws Exception {
+        Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             String structureName = (String) dataMap.get("structureName");
             String extension = (String) dataMap.get("extension");
 
-            Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
 
             Query q = session.createQuery(QUERY_GET_STRUCTURE_FILE_BY_ID);
@@ -248,13 +260,16 @@ public class StructureFileService {
             session.getTransaction().commit();
             session.close();
         }catch (Exception e){
+            session.getTransaction().rollback();
+            session.close();
             throw e;
         }
     }
     public static StructureFile getStructureFileByName(String structureName) throws Exception {
         StructureFile structureFile = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
         try{
-            Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
 
             Query q = session.createQuery(QUERY_GET_STRUCTURE_FILE_BY_NAME);
@@ -264,6 +279,8 @@ public class StructureFileService {
             session.getTransaction().commit();
             session.close();
         }catch (Exception e){
+            session.getTransaction().rollback();
+            session.close();
             throw e;
         }
         return structureFile;

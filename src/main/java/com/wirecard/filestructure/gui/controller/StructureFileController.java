@@ -39,15 +39,15 @@ public class StructureFileController extends AbstractController {
         mainFrame.setContentScrollPane(structureView);
     }
 
-    public void doDelete(List<Vector> data){
+    public void doDelete(List<Vector> data) throws Exception {
         try {
             service.deleteById(data);
         }catch (Exception e){
-            e.printStackTrace();
+            throw  e;
         }
     }
 
-    public void doSaveData(AbstractViewPanel view, String structureName, String extension, String productName, String projectName, List headerData, List detailData, List footerData){
+    public void doSaveData(AbstractViewPanel view, String structureName, String extension, String productName, String projectName, List headerData, List detailData, List footerData) throws Exception {
 
         try{
             Map dataMap = new HashMap();
@@ -69,7 +69,7 @@ public class StructureFileController extends AbstractController {
             MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(view);
             mainFrame.setContentScrollPane(structureView);
         }catch (Exception e){
-            e.printStackTrace();
+            throw e;
         }
     }
 
@@ -114,7 +114,7 @@ public class StructureFileController extends AbstractController {
         mainFrame.setContentScrollPane(detailView);
     }
 
-    public void doUpdate(AbstractViewPanel view, String parentId, String fileName, String productName, String projectName, List headerData, List detailData, List footerData){
+    public void doUpdate(AbstractViewPanel view, String parentId, String fileName, String productName, String projectName, List headerData, List detailData, List footerData) throws Exception {
         try{
             Map dataMap = new HashMap();
 
@@ -135,19 +135,18 @@ public class StructureFileController extends AbstractController {
             MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(view);
             mainFrame.setContentScrollPane(structureView);
         }catch (Exception e){
-            e.printStackTrace();
+           throw e;
         }
     }
 
 
 
-    public List getStructureFileList(){
+    public List getStructureFileList() throws Exception {
         try {
             return service.getStructureFileList();
         }catch (Exception e){
-            e.printStackTrace();
+            throw e;
         }
-        return new ArrayList();
     }
 
 }

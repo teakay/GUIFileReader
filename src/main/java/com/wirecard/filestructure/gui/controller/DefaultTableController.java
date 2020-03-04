@@ -15,16 +15,15 @@ import java.util.Map;
 public class DefaultTableController extends AbstractController {
     protected StructureFileService structureFileService;
 
-    public List<StructureFile> getStructureList(){
+    public List<StructureFile> getStructureList() throws Exception {
         try {
             return structureFileService.getStructureFileListModel();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e;
         }
-        return new ArrayList();
     }
 
-    public Map getColumnFromStructure(String structureName){
+    public Map getColumnFromStructure(String structureName) throws Exception {
         Map resultMap = new HashMap();
         try {
             List structureDetailList = structureFileService.getStructureFileAndDetailByStructureName(structureName);
@@ -59,12 +58,12 @@ public class DefaultTableController extends AbstractController {
             resultMap.put("footerLength",footerLengthList);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e;
         }
         return resultMap;
     }
 
-    public void saveAsFile(String structureName, JTable headerTable, JTable detailTable, JTable footerTable, String filePath){
+    public void saveAsFile(String structureName, JTable headerTable, JTable detailTable, JTable footerTable, String filePath) throws Exception {
         try {
             List structureDetailList = structureFileService.getStructureFileAndDetailByStructureName(structureName);
 
@@ -122,7 +121,7 @@ public class DefaultTableController extends AbstractController {
             writer.write(stringBuffer.toString());
             writer.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e;
         }
     }
 }

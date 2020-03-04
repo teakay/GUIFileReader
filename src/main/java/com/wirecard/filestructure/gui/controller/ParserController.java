@@ -23,7 +23,7 @@ public class ParserController extends DefaultTableController {
     private TemplateService templateService;
 
 
-    public Map parseFile(String filePathAndName, Map columnMap){
+    public Map parseFile(String filePathAndName, Map columnMap) throws IOException {
         Map returnMap = new HashMap();
 
         List headerLengthList = (List)columnMap.get("headerLength");
@@ -80,14 +80,14 @@ public class ParserController extends DefaultTableController {
             returnMap.put("detail",detailList);
             returnMap.put("footer",footer);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw  e;
         } catch (IOException e) {
-            e.printStackTrace();
+            throw e;
         }
         return  returnMap;
     }
 
-    public void saveAsTemplate(String structureName, JTable headerTable, JTable detailTable, JTable footerTable, String templateName){
+    public void saveAsTemplate(String structureName, JTable headerTable, JTable detailTable, JTable footerTable, String templateName) throws Exception {
         System.out.println(templateName);
 
         List templateDetailList = new ArrayList();
@@ -136,7 +136,7 @@ public class ParserController extends DefaultTableController {
 
             templateService.saveTemplate(template, templateDetailList);
         } catch (Exception e) {
-            e.printStackTrace();
+           throw e;
         }
     }
 

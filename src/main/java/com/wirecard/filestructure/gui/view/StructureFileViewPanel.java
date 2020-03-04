@@ -108,9 +108,12 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
     }
 
     private void localInitialization(){
-        structureTableModel.addRow(controller.getStructureFileList());
-        structureFileTable.removeColumn(structureFileTable.getColumnModel().getColumn(0)); //hide column ID
-
+        try {
+            structureTableModel.addRow(controller.getStructureFileList());
+            structureFileTable.removeColumn(structureFileTable.getColumnModel().getColumn(0)); //hide column ID
+        }catch (Exception ex){
+            displayErrorMessage(ex);
+        }
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -128,9 +131,13 @@ public class StructureFileViewPanel extends  AbstractViewPanel {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List selectedRows = structureTableModel.getElements(structureFileTable.getSelectedRows());
-                controller.doDelete(selectedRows);
-                structureTableModel.deleteRow(selectedRows);
+                try {
+                    List selectedRows = structureTableModel.getElements(structureFileTable.getSelectedRows());
+                    controller.doDelete(selectedRows);
+                    structureTableModel.deleteRow(selectedRows);
+                }catch (Exception ex){
+                    displayErrorMessage(ex);
+                }
             }
         });
         structureFileTable.addMouseListener(new MouseAdapter() {

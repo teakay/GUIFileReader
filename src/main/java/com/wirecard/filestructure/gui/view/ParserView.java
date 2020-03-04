@@ -196,11 +196,15 @@ public class ParserView extends AbstractViewPanel {
 
     }
     private void localInitialization(){
-        List<StructureFile> list = controller.getStructureList();
-        structureList.addItem("- Select -");
-        for(int i = 0; i < list.size(); i++){
-            StructureFile sf = (StructureFile) list.get(i);
-            structureList.addItem(sf.getStructureName());
+        try {
+            List<StructureFile> list = controller.getStructureList();
+            structureList.addItem("- Select -");
+            for (int i = 0; i < list.size(); i++) {
+                StructureFile sf = (StructureFile) list.get(i);
+                structureList.addItem(sf.getStructureName());
+            }
+        }catch (Exception ex){
+            displayErrorMessage(ex);
         }
 
         browserFileButton.addActionListener(new ActionListener() {
@@ -219,53 +223,57 @@ public class ParserView extends AbstractViewPanel {
         parseFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(isDataValid()){
-                    String structureName = (String) structureList.getSelectedItem();
-                    Map columnMap = controller.getColumnFromStructure(structureName);
+                try {
+                    if (isDataValid()) {
+                        String structureName = (String) structureList.getSelectedItem();
+                        Map columnMap = controller.getColumnFromStructure(structureName);
 
-                    Map parseMap = controller.parseFile(fileNameTextField.getText(), columnMap);
+                        Map parseMap = controller.parseFile(fileNameTextField.getText(), columnMap);
 
-                    DefaultTableModel headerModel = new DefaultTableModel();
-                    List headerList = (List) columnMap.get("header");
-                    for (int i = 0; i < headerList.size(); i++) {
-                        headerModel.addColumn(headerList.get(i));
-                    }
-                    headerModel.addRow((Vector) parseMap.get("header"));
-                    headerTable.setModel(headerModel);
-                    if (headerModel.getColumnCount() > 8) {
-                        headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                    } else {
-                        headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-                    }
+                        DefaultTableModel headerModel = new DefaultTableModel();
+                        List headerList = (List) columnMap.get("header");
+                        for (int i = 0; i < headerList.size(); i++) {
+                            headerModel.addColumn(headerList.get(i));
+                        }
+                        headerModel.addRow((Vector) parseMap.get("header"));
+                        headerTable.setModel(headerModel);
+                        if (headerModel.getColumnCount() > 8) {
+                            headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                        } else {
+                            headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                        }
 
-                    DefaultTableModel detailModel = new DefaultTableModel();
-                    List detailList = (List) columnMap.get("detail");
-                    for (int i = 0; i < detailList.size(); i++) {
-                        detailModel.addColumn(detailList.get(i));
-                    }
-                    List detailDataList = (List) parseMap.get("detail");
-                    for (int n = 0; n < detailDataList.size(); n++) {
-                        detailModel.addRow((Vector) detailDataList.get(n));
-                    }
-                    detailTable.setModel(detailModel);
-                    if (detailModel.getColumnCount() > 8) {
-                        detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                    } else {
-                        detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-                    }
+                        DefaultTableModel detailModel = new DefaultTableModel();
+                        List detailList = (List) columnMap.get("detail");
+                        for (int i = 0; i < detailList.size(); i++) {
+                            detailModel.addColumn(detailList.get(i));
+                        }
+                        List detailDataList = (List) parseMap.get("detail");
+                        for (int n = 0; n < detailDataList.size(); n++) {
+                            detailModel.addRow((Vector) detailDataList.get(n));
+                        }
+                        detailTable.setModel(detailModel);
+                        if (detailModel.getColumnCount() > 8) {
+                            detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                        } else {
+                            detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                        }
 
-                    DefaultTableModel footerModel = new DefaultTableModel();
-                    List footerList = (List) columnMap.get("footer");
-                    for (int i = 0; i < footerList.size(); i++) {
-                        footerModel.addColumn(footerList.get(i));
+                        DefaultTableModel footerModel = new DefaultTableModel();
+                        List footerList = (List) columnMap.get("footer");
+                        for (int i = 0; i < footerList.size(); i++) {
+                            footerModel.addColumn(footerList.get(i));
+                        }
+                        footerModel.addRow((Vector) parseMap.get("footer"));
+                        footerTable.setModel(footerModel);
+                        if (footerModel.getColumnCount() > 8) {
+                            footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                        } else {
+                            footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                        }
                     }
-                    footerModel.addRow((Vector) parseMap.get("footer"));
-                    footerTable.setModel(footerModel);
-                    if (footerModel.getColumnCount() > 8) {
-                        footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                    } else {
-                        footerTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-                    }
+                }catch(Exception ex){
+                    displayErrorMessage(ex);
                 }
             }
         });
@@ -303,13 +311,18 @@ public class ParserView extends AbstractViewPanel {
                         footerTable.getCellEditor().stopCellEditing();
                     }
                     String templateName = JOptionPane.showInputDialog("Enter Template Name :");
-                    controller.saveAsTemplate((String) structureList.getSelectedItem(), headerTable, detailTable, footerTable, templateName);
+                    try {
+                        controller.saveAsTemplate((String) structureList.getSelectedItem(), headerTable, detailTable, footerTable, templateName);
 
-                    MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(parseFileButton);
-                    JOptionPane.showMessageDialog(mainFrame,
-                            "Successfully saved as template",
-                            "Success",
-                            JOptionPane.PLAIN_MESSAGE);
+                        MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(parseFileButton);
+                        JOptionPane.showMessageDialog(mainFrame,
+                                "Successfully saved as template",
+                                "Success",
+                                JOptionPane.PLAIN_MESSAGE);
+
+                    }catch (Exception ex){
+                        displayErrorMessage(ex);
+                    }
                 }
                 controller.goToTemplateView(getContainer());
             }
@@ -339,7 +352,12 @@ public class ParserView extends AbstractViewPanel {
                         File fileToSave = fileChooser.getSelectedFile();
                         filePath = fileToSave.getAbsolutePath();
                     }
-                    controller.saveAsFile((String) structureList.getSelectedItem(), headerTable, detailTable, footerTable, filePath);
+                    try {
+                        controller.saveAsFile((String) structureList.getSelectedItem(), headerTable, detailTable, footerTable, filePath);
+
+                    }catch (Exception ex){
+                        displayErrorMessage(ex);
+                    }
                 }
             }
         });

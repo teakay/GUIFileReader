@@ -74,4 +74,11 @@ public abstract class AbstractViewPanel extends JPanel {
         return this;
     }
 
+    protected void displayErrorMessage(Exception ex){
+        MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(this);
+        JOptionPane.showMessageDialog(mainFrame,
+                ex.getCause(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
 }
