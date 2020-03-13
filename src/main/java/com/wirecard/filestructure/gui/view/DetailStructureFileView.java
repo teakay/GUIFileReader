@@ -30,6 +30,7 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
     private JTable footerTable;
     private JButton backButton;
     private JButton saveButton;
+    private JButton saveAsNewButton;
     private JButton deleteButton1;
     private JButton addButton1;
     private JButton deleteButton2;
@@ -143,6 +144,8 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
         backButton.setText("Back");
         saveButton = new JButton();
         saveButton.setText("Save");
+        saveAsNewButton = new JButton();
+        saveAsNewButton.setText("Save as New");
 
 
         GroupLayout layout = new GroupLayout(this);
@@ -190,6 +193,7 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(backButton)
                         .addComponent(saveButton)
+                        .addComponent(saveAsNewButton)
                 )
         );
 
@@ -233,6 +237,7 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(backButton)
                         .addComponent(saveButton)
+                        .addComponent(saveAsNewButton)
                 )
         );
     }
@@ -311,6 +316,36 @@ public class DetailStructureFileView extends  AbstractViewPanel  {
                     try {
                         controller.doUpdate(getContainer(), headerId.getText(),
                                 nameTextField.getText(), productTextField.getText(), projectTextField.getText(),
+                                headerTableModel.getAllData(), detailTableModel.getAllData(), footerTableModel.getAllData());
+                    }catch (Exception ex){
+                        displayErrorMessage(ex);
+                    }
+                }
+            }
+        });
+
+        saveAsNewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (nameTextField.getText().equals("")) {
+                    MainFrame mainFrame = (MainFrame) SwingUtilities.getRoot(saveButton);
+                    JOptionPane.showMessageDialog(mainFrame,
+                            "File Structure Name Must Not Be Empty",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    if (headerTable.isEditing()) {
+                        headerTable.getCellEditor().stopCellEditing();
+                    }
+                    if (detailTable.isEditing()) {
+                        detailTable.getCellEditor().stopCellEditing();
+                    }
+                    if (footerTable.isEditing()) {
+                        footerTable.getCellEditor().stopCellEditing();
+                    }
+                    try {
+                        controller.doSaveData(getContainer(), nameTextField.getText(),
+                                (String)fileExtensionList.getSelectedItem(), productTextField.getText(), projectTextField.getText(),
                                 headerTableModel.getAllData(), detailTableModel.getAllData(), footerTableModel.getAllData());
                     }catch (Exception ex){
                         displayErrorMessage(ex);

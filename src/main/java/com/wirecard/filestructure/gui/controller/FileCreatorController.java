@@ -43,19 +43,19 @@ public class FileCreatorController extends DefaultTableController {
                             (headerList.size() < templateDetail.getRowNo())) {
                         headerList.add(templateDetail.getRowNo() - 1, new Vector());
                     }
-                    headerList.get(templateDetail.getRowNo() - 1).add(templateDetail.getDataSequenceNo() - 1, templateDetail.getFieldValue());
+                    headerList.get(templateDetail.getRowNo() - 1).add(templateDetail.getDataSequenceNo() - 1, templateDetail);
                 } else if ("detail".equals(templateDetail.getDataType())) {
                     if (detailList.isEmpty() ||
                             (detailList.size() < templateDetail.getRowNo())) {
                         detailList.add(templateDetail.getRowNo() - 1, new Vector());
                     }
-                    detailList.get(templateDetail.getRowNo() - 1).add(templateDetail.getDataSequenceNo() - 1, templateDetail.getFieldValue());
+                    detailList.get(templateDetail.getRowNo() - 1).add(templateDetail.getDataSequenceNo() - 1, templateDetail);
                 } else if ("footer".equals(templateDetail.getDataType())) {
                     if (footerList.isEmpty() ||
                             (footerList.size() < templateDetail.getRowNo())) {
                         footerList.add(templateDetail.getRowNo() - 1, new Vector());
                     }
-                    footerList.get(templateDetail.getRowNo() - 1).add(templateDetail.getDataSequenceNo() - 1, templateDetail.getFieldValue());
+                    footerList.get(templateDetail.getRowNo() - 1).add(templateDetail.getDataSequenceNo() - 1, templateDetail);
                 }
             }
 

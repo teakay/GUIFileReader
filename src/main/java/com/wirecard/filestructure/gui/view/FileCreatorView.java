@@ -3,7 +3,9 @@ package com.wirecard.filestructure.gui.view;
 import com.wirecard.filestructure.gui.controller.AbstractController;
 import com.wirecard.filestructure.gui.controller.FileCreatorController;
 import com.wirecard.filestructure.gui.entity.StructureFile;
+import com.wirecard.filestructure.gui.entity.StructureFileDetail;
 import com.wirecard.filestructure.gui.entity.Template;
+import com.wirecard.filestructure.gui.entity.TemplateDetail;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -15,9 +17,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 
 public class FileCreatorView extends AbstractViewPanel {
     // top : pilihan use template or use structure (isi dari nol)
@@ -232,24 +233,29 @@ public class FileCreatorView extends AbstractViewPanel {
                         String templateName = (String) templateComboBox.getSelectedItem();
 
                         Map columnMap = controller.getColumnFromStructure(structureName);
-                        Map dataMap = controller.getTemplateDetailByName(templateName);
-                        List headerDataList = (List) dataMap.get("header");
-                        List detailDataList = (List) dataMap.get("detail");
-                        List footerDataList = (List) dataMap.get("footer");
+                        Map dataMap = new HashMap();
+                        List headerDataList = new ArrayList();
+                        List detailDataList = new ArrayList();
+                        List footerDataList = new ArrayList();
 
+                        if(templateName!=null && !"- Select -".equals(templateName)) {
+                            dataMap = controller.getTemplateDetailByName(templateName);
+                            headerDataList = (List) dataMap.get("header");
+                            detailDataList = (List) dataMap.get("detail");
+                            footerDataList = (List) dataMap.get("footer");
+                        }
                         headerModel = new DefaultTableModel();
                         List headerList = (List) columnMap.get("header");
                         Vector rowDataHeader = new Vector();
                         for (int i = 0; i < headerList.size(); i++) {
-                            headerModel.addColumn(headerList.get(i));
+                            StructureFileDetail sfd = (StructureFileDetail) headerList.get(i);
+                            headerModel.addColumn(sfd.getFieldName());
                             rowDataHeader.add(null);
                         }
                         if (dataMap.isEmpty()) {
                             headerModel.addRow(rowDataHeader);
                         } else {
-                            for (int i = 0; i < headerDataList.size(); i++) {
-                                headerModel.addRow((Vector) headerDataList.get(i));
-                            }
+                            addDataRowFromTemplate(headerDataList, headerList, headerModel);
                         }
                         headerTable.setModel(headerModel);
                         if (headerModel.getColumnCount() > 8) {
@@ -262,15 +268,14 @@ public class FileCreatorView extends AbstractViewPanel {
                         List detailList = (List) columnMap.get("detail");
                         Vector rowDataDetail = new Vector();
                         for (int i = 0; i < detailList.size(); i++) {
-                            detailModel.addColumn(detailList.get(i));
+                            StructureFileDetail sfd = (StructureFileDetail) detailList.get(i);
+                            detailModel.addColumn(sfd.getFieldName());
                             rowDataDetail.add(null);
                         }
                         if (dataMap.isEmpty()) {
                             detailModel.addRow(rowDataDetail);
                         } else {
-                            for (int i = 0; i < detailDataList.size(); i++) {
-                                detailModel.addRow((Vector) detailDataList.get(i));
-                            }
+                            addDataRowFromTemplate(detailDataList, detailList, detailModel);
                         }
                         detailTable.setModel(detailModel);
                         if (detailModel.getColumnCount() > 8) {
@@ -283,15 +288,14 @@ public class FileCreatorView extends AbstractViewPanel {
                         List footerList = (List) columnMap.get("footer");
                         Vector rowDataFooter = new Vector();
                         for (int i = 0; i < footerList.size(); i++) {
-                            footerModel.addColumn(footerList.get(i));
+                            StructureFileDetail sfd = (StructureFileDetail) footerList.get(i);
+                            footerModel.addColumn(sfd.getFieldName());
                             rowDataFooter.add(null);
                         }
                         if (dataMap.isEmpty()) {
                             footerModel.addRow(rowDataFooter);
                         } else {
-                            for (int i = 0; i < footerDataList.size(); i++) {
-                                footerModel.addRow((Vector) footerDataList.get(i));
-                            }
+                            addDataRowFromTemplate(footerDataList, footerList, footerModel);
                         }
                         footerTable.setModel(footerModel);
                         if (footerModel.getColumnCount() > 8) {
@@ -360,5 +364,29 @@ public class FileCreatorView extends AbstractViewPanel {
                 }
             }
         });
+    }
+
+    private void addDataRowFromTemplate(List dataList, List columnList, DefaultTableModel model){
+        for (int i = 0; i < dataList.size(); i++) {
+            Vector vectorTemplateDetail = (Vector) dataList.get(i);
+
+            Vector rowData = new Vector();
+            for(int col = 0; col < columnList.size(); col++) {
+                StructureFileDetail sfd = (StructureFileDetail) columnList.get(col);
+                String columnName = sfd.getFieldName();
+                boolean isValueExist = false;
+                for(int dataCol = 0; dataCol < vectorTemplateDetail.size(); dataCol++){
+                    TemplateDetail td = (TemplateDetail) vectorTemplateDetail.get(dataCol);
+                    if(td.getFieldName().equals(columnName)){
+                        rowData.add(col, td.getFieldValue());
+                        isValueExist = true;
+                        break;
+                    }
+                }
+                if(!isValueExist)
+                    rowData.add(col,"");
+            }
+            model.addRow(rowData);
+        }
     }
 }

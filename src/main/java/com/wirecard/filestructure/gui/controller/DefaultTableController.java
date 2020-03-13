@@ -30,22 +30,22 @@ public class DefaultTableController extends AbstractController {
             List headerList = new ArrayList();
             List detailList = new ArrayList();
             List footerList = new ArrayList();
-
-            List headerLengthList = new ArrayList();
-            List detailLengthList = new ArrayList();
-            List footerLengthList = new ArrayList();
+//
+//            List headerLengthList = new ArrayList();
+//            List detailLengthList = new ArrayList();
+//            List footerLengthList = new ArrayList();
 
             for(int i = 0; i < structureDetailList.size(); i++){
                 StructureFileDetail sfd = (StructureFileDetail)structureDetailList.get(i);
                 if("header".equals(sfd.getDetailType())){
-                    headerList.add(sfd.getSequenceNo()-1,sfd.getFieldName());
-                    headerLengthList.add(sfd.getSequenceNo()-1,sfd.getDataLength());
+                    headerList.add(sfd.getSequenceNo()-1,sfd);
+//                    headerLengthList.add(sfd.getSequenceNo()-1,sfd.getDataLength());
                 }else if("detail".equals(sfd.getDetailType())){
-                    detailList.add(sfd.getSequenceNo()-1, sfd.getFieldName());
-                    detailLengthList.add(sfd.getSequenceNo()-1,sfd.getDataLength());
+                    detailList.add(sfd.getSequenceNo()-1, sfd);
+//                    detailLengthList.add(sfd.getSequenceNo()-1,sfd.getDataLength());
                 }else if("footer".equals(sfd.getDetailType())){
-                    footerList.add(sfd.getSequenceNo()-1, sfd.getFieldName());
-                    footerLengthList.add(sfd.getSequenceNo()-1,sfd.getDataLength());
+                    footerList.add(sfd.getSequenceNo()-1, sfd);
+//                    footerLengthList.add(sfd.getSequenceNo()-1,sfd.getDataLength());
                 }
             }
 
@@ -53,9 +53,9 @@ public class DefaultTableController extends AbstractController {
             resultMap.put("detail",detailList);
             resultMap.put("footer",footerList);
 
-            resultMap.put("headerLength",headerLengthList);
-            resultMap.put("detailLenght",detailLengthList);
-            resultMap.put("footerLength",footerLengthList);
+//            resultMap.put("headerLength",headerLengthList);
+//            resultMap.put("detailLenght",detailLengthList);
+//            resultMap.put("footerLength",footerLengthList);
 
         } catch (Exception e) {
             throw e;
@@ -90,7 +90,7 @@ public class DefaultTableController extends AbstractController {
                     String cellValue = (String) headerTable.getValueAt(row,col);
                     String columnName = (String) headerTable.getColumnName(col);
                     int colLength = ((Integer)headerMap.get(columnName)).intValue();
-                    stringBuffer.append(String.format("%-"+colLength+"s",cellValue));
+                    stringBuffer.append(String.format("%-"+colLength+"s",cellValue.trim()));
                 }
             }
             stringBuffer.append("\n");
@@ -102,7 +102,7 @@ public class DefaultTableController extends AbstractController {
                     String cellValue = (String) detailTable.getValueAt(row,col);
                     String columnName = (String) detailTable.getColumnName(col);
                     int colLength = ((Integer)detailMap.get(columnName)).intValue();
-                    stringBuffer.append(String.format("%-"+colLength+"s",cellValue));
+                    stringBuffer.append(String.format("%-"+colLength+"s",cellValue.trim()));
                 }
                 stringBuffer.append("\n");
             }
@@ -113,7 +113,7 @@ public class DefaultTableController extends AbstractController {
                     String cellValue = (String) footerTable.getValueAt(row,col);
                     String columnName = (String) footerTable.getColumnName(col);
                     int colLength = ((Integer)footerMap.get(columnName)).intValue();
-                    stringBuffer.append(String.format("%-"+colLength+"s",cellValue));
+                    stringBuffer.append(String.format("%-"+colLength+"s",cellValue.trim()));
                 }
             }
 

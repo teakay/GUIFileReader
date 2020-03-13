@@ -63,18 +63,8 @@ public class StructureFileDetail {
         this.sampleValue = sampleValue;
         this.description = description;
     }
-//
-//    public StructureFileDetail(StructureFile structureFile,  String detailType, Integer sequenceNo, String fieldName,
-//                               String mandatory, String dataType, Integer dataLength){
-//        this.structureFile = structureFile;
-//        this.detailType = detailType;
-//        this.dataType = dataType;
-//        this.sequenceNo = sequenceNo;
-//        this.fieldName = fieldName;
-//        this.mandatory = mandatory;
-//        this.dataLength = dataLength;
-//    }
-//
+
+
     public StructureFileDetail(StructureFile structureFile,  String detailType, Integer sequenceNo, String fieldName,
                                String mandatory, String dataType, Integer dataLength, String sampleValue, String description){
         this.structureFile = structureFile;

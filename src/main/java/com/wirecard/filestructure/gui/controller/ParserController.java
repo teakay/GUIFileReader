@@ -26,9 +26,9 @@ public class ParserController extends DefaultTableController {
     public Map parseFile(String filePathAndName, Map columnMap) throws IOException {
         Map returnMap = new HashMap();
 
-        List headerLengthList = (List)columnMap.get("headerLength");
-        List detailLengthList = (List)columnMap.get("detailLenght");
-        List footerLengthList = (List)columnMap.get("footerLength");
+        List headerLengthList = (List)columnMap.get("header");
+        List detailLengthList = (List)columnMap.get("detail");
+        List footerLengthList = (List)columnMap.get("footer");
 
         Vector header = new Vector();
         Vector detail = new Vector();
@@ -47,7 +47,7 @@ public class ParserController extends DefaultTableController {
                 if("H".equals(recordType)){
                     int size = headerLengthList.size();
                     for(int n = 0; n < size; n++){
-                        Integer length = (Integer)headerLengthList.get(n);
+                        Integer length = ((StructureFileDetail)headerLengthList.get(n)).getDataLength();
                         lastindex = firstindex + length;
                         String substring = line.substring(firstindex,lastindex);
                         firstindex = lastindex;
@@ -56,7 +56,7 @@ public class ParserController extends DefaultTableController {
                 }else if(!"H".equals(recordType) && !"F".equals(recordType)){
                     int size = detailLengthList.size();
                     for(int n = 0; n < size; n++){
-                        Integer length = (Integer)detailLengthList.get(n);
+                        Integer length = ((StructureFileDetail)detailLengthList.get(n)).getDataLength();
                         lastindex = firstindex + length;
                         String substring = line.substring(firstindex,lastindex);
                         firstindex = lastindex;
@@ -67,7 +67,7 @@ public class ParserController extends DefaultTableController {
                 }else if("F".equals(recordType)){
                     int size = footerLengthList.size();
                     for(int n = 0; n < size; n++){
-                        Integer length = (Integer)footerLengthList.get(n);
+                        Integer length = ((StructureFileDetail)footerLengthList.get(n)).getDataLength();
                         lastindex = firstindex + length;
                         String substring = line.substring(firstindex,lastindex);
                         firstindex = lastindex;

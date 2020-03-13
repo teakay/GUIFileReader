@@ -2,6 +2,7 @@ package com.wirecard.filestructure.gui.view;
 
 import com.wirecard.filestructure.gui.controller.ParserController;
 import com.wirecard.filestructure.gui.entity.StructureFile;
+import com.wirecard.filestructure.gui.entity.StructureFileDetail;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
@@ -233,7 +234,8 @@ public class ParserView extends AbstractViewPanel {
                         DefaultTableModel headerModel = new DefaultTableModel();
                         List headerList = (List) columnMap.get("header");
                         for (int i = 0; i < headerList.size(); i++) {
-                            headerModel.addColumn(headerList.get(i));
+                            StructureFileDetail sfd = (StructureFileDetail)headerList.get(i);
+                            headerModel.addColumn(sfd.getFieldName());
                         }
                         headerModel.addRow((Vector) parseMap.get("header"));
                         headerTable.setModel(headerModel);
@@ -246,7 +248,8 @@ public class ParserView extends AbstractViewPanel {
                         DefaultTableModel detailModel = new DefaultTableModel();
                         List detailList = (List) columnMap.get("detail");
                         for (int i = 0; i < detailList.size(); i++) {
-                            detailModel.addColumn(detailList.get(i));
+                            StructureFileDetail sfd = (StructureFileDetail)detailList.get(i);
+                            detailModel.addColumn(sfd.getFieldName());
                         }
                         List detailDataList = (List) parseMap.get("detail");
                         for (int n = 0; n < detailDataList.size(); n++) {
@@ -262,7 +265,8 @@ public class ParserView extends AbstractViewPanel {
                         DefaultTableModel footerModel = new DefaultTableModel();
                         List footerList = (List) columnMap.get("footer");
                         for (int i = 0; i < footerList.size(); i++) {
-                            footerModel.addColumn(footerList.get(i));
+                            StructureFileDetail sfd = (StructureFileDetail)footerList.get(i);
+                            footerModel.addColumn(sfd.getFieldName());
                         }
                         footerModel.addRow((Vector) parseMap.get("footer"));
                         footerTable.setModel(footerModel);
